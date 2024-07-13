@@ -1,1 +1,1 @@
-# MyTemplate
+# Onion Architecture Template
