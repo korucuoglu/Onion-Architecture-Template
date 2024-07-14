@@ -1,7 +1,5 @@
-﻿using Common.Libraries.MediatR.Abstractions;
+﻿namespace MyTemplate.Application.TestManagement.GetAll;
 
-namespace MyTemplate.Application.TestManagement.GetAll;
-public class Query: QueryBase<int>
+public class Query : QueryBase<int>
 {
-
 }

@@ -1,7 +1,7 @@
-﻿using Common;
+﻿using System.Reflection;
+using Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace MyTemplate.Application;
 

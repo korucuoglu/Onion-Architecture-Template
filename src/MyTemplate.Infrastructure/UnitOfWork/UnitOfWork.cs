@@ -1,8 +1,4 @@
-﻿using Common.Interfaces.Repositories.EF;
-using MyTemplate.Domain.Interfaces;
-using MyTemplate.Infrastructure.Context;
-
-namespace MyTemplate.Infrastructure.EF;
+﻿namespace MyTemplate.Infrastructure.EF;
 
 public class UnitOfWork : IUnitOfWork
 {
