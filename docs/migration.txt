@@ -1,0 +1,1 @@
+dotnet ef migrations add InitialCreate --project MyTemplate.Infrastructure --startup-project MyTemplate.API

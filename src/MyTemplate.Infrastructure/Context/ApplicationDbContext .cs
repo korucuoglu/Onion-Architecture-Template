@@ -1,13 +1,84 @@
-﻿namespace MyTemplate.Infrastructure.Context;
+﻿using Common.Extensions;
+using Common.Interfaces.Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using MyTemplate.Domain.Entities;
 
-public class ApplicationDbContext : DbContext
+namespace MyTemplate.Infrastructure.Context;
+
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
 {
+    public DbSet<Product> Product { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+        ChangeTracker.LazyLoadingEnabled = false;
+        ChangeTracker.AutoDetectChangesEnabled = false;
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        // Base class'ın OnModelCreating'ini çağırıyoruz
+        base.OnModelCreating(builder);
+
+        // ApplicationUser tablosunu AUTH şemasına taşıyoruz
+        builder.Entity<ApplicationUser>(b =>
+        {
+            b.ToTable(name: "AspNetUsers", schema: "AUTH");
+        });
+
+        // ApplicationRole tablosunu AUTH şemasına taşıyoruz
+        builder.Entity<ApplicationRole>(b =>
+        {
+            b.ToTable(name: "AspNetRoles", schema: "AUTH");
+        });
+
+        // Diğer Identity tablolarını da AUTH şemasına taşıyoruz
+        builder.Entity<IdentityUserClaim<int>>(b =>
+        {
+            b.ToTable(name: "AspNetUserClaims", schema: "AUTH");
+        });
+
+        builder.Entity<IdentityUserLogin<int>>(b =>
+        {
+            b.ToTable(name: "AspNetUserLogins", schema: "AUTH");
+        });
+
+        builder.Entity<IdentityUserToken<int>>(b =>
+        {
+            b.ToTable(name: "AspNetUserTokens", schema: "AUTH");
+        });
+
+        builder.Entity<IdentityRoleClaim<int>>(b =>
+        {
+            b.ToTable(name: "AspNetRoleClaims", schema: "AUTH");
+        });
+
+        builder.Entity<IdentityUserRole<int>>(b =>
+        {
+            b.ToTable(name: "AspNetUserRoles", schema: "AUTH");
+        });
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    /// <summary>
+    /// CreatedDate ve UpdatedDate alanlarını boşsa doldurur. 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        optionsBuilder.EnableSensitiveDataLogging();
+        foreach (var changedEntity in ChangeTracker.Entries<IEntityWithDate>())
+        {
+            if (changedEntity.State == EntityState.Added && changedEntity.Entity.CreatedDate.HasValue == false)
+            {
+                changedEntity.Entity.CreatedDate = DateTimeOffset.Now.ToDateTime(TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"));
+            }
+
+            if (changedEntity.State == EntityState.Modified && changedEntity.Entity.UpdatedDate.HasValue == false)
+            {
+                changedEntity.Entity.UpdatedDate = DateTimeOffset.Now.ToDateTime(TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"));
+            }
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

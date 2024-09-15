@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Infrastructure.EF;
+﻿namespace MyTemplate.Infrastructure;
 
 public class EFUnitOfWork : IEFUnitOfWork
 {

@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MyTemplate.Infrastructure.EF;
+using MyTemplate.Domain.Entities;
 
 namespace MyTemplate.Infrastructure;
 
@@ -13,9 +14,19 @@ public static class ServiceRegistration
             opt.EnableSensitiveDataLogging(true);
             opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), configure =>
             {
-                configure.MigrationsAssembly("Infrastructure");
+                configure.MigrationsAssembly("MyTemplate.Infrastructure"); // Migrationlar bu projede saklanacak
             });
         });
+
+        services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
+        {
+            opt.User.RequireUniqueEmail = true;
+            opt.Password.RequireNonAlphanumeric = false;
+            opt.Password.RequireDigit = false;
+            opt.Password.RequireLowercase = false;
+            opt.Password.RequireUppercase = false;
+        }).AddEntityFrameworkStores<ApplicationDbContext>()
+          .AddDefaultTokenProviders();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
