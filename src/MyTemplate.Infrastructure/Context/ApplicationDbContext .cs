@@ -9,6 +9,7 @@ namespace MyTemplate.Infrastructure.Context;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
 {
     public DbSet<Product> Product { get; set; }
+    public DbSet<Setting> Setting { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         ChangeTracker.LazyLoadingEnabled = false;
@@ -17,7 +18,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        // Base class'ın OnModelCreating'ini çağırıyoruz
         base.OnModelCreating(builder);
 
         // ApplicationUser tablosunu AUTH şemasına taşıyoruz
@@ -56,6 +56,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         builder.Entity<IdentityUserRole<int>>(b =>
         {
             b.ToTable(name: "AspNetUserRoles", schema: "AUTH");
+        });
+
+        builder.Entity<Setting>(b =>
+        {
+            b.ToTable(name: "Setting", schema: "APP");
         });
     }
 
