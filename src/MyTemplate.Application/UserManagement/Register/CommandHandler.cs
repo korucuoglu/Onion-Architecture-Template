@@ -47,6 +47,8 @@ public class CommandHandler : CommandHandlerBase<Command>
         {
             string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
+           
+            // email.Send()
         }
 
         return Result.WithSuccess();

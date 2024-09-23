@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace MyTemplate.API.Controllers;
 
 [Route("api/[controller]")]
-[ApiController]
 public class TestController : BaseApiController
 {
     [HttpGet]
