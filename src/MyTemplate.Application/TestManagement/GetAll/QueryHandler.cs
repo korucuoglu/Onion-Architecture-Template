@@ -4,6 +4,6 @@ public class QueryHandler : QueryHandlerBase<Query, int>
 {
     protected override async Task<Result<int>> HandleAsync(Query request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Result<int>.WithSuccess(55);
     }
 }

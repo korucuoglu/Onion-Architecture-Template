@@ -3,8 +3,13 @@
 namespace MyTemplate.Application;
 public static class Helper
 {
-    public static object? GetSettingValue(Setting setting)
+    public static object? GetSettingValue(Setting? setting)
     {
+        if (setting is null)
+        {
+            return null;
+        }
+
         return setting.DataType switch
         {
             "long" => Deserialize<long>(setting.Value),
@@ -14,7 +19,7 @@ public static class Helper
             "string" => Deserialize<string>(setting.Value),
             "string[]" => Deserialize<string[]>(setting.Value),
             "boolean" => Deserialize<bool>(setting.Value),
-            _ => default
+            _ => throw new Exception("Hatalı ayar gönderildi")
         };
     }
     public static T? Deserialize<T>(string value)
