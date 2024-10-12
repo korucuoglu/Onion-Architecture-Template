@@ -13,4 +13,12 @@ public class AuthController : BaseApiController
     [HttpPost("login")]
     public async Task<IActionResult> LoginAsync([FromBody] Application.UserManagement.Login.Command command)
      => Result(await Mediator.Send(command));
+
+    [HttpPost("update")]
+    public async Task<IActionResult> UpdateAsync([FromBody] Application.UserManagement.Update.Command command)
+   => Result(await Mediator.Send(command));
+
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] Application.UserManagement.ChangePassword.Command command)
+  => Result(await Mediator.Send(command));
 }
