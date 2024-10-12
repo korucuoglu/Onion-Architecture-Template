@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MyTemplate.Application.UserManagement.Login;
-public class CommandHandler : CommandHandlerBase<Command, Dto>
+public class CommandHandler : CommandHandlerBase<Command, Dto> 
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUnitOfWork _unitOfWork;

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace MyTemplate.Application;
 public static class Helper
@@ -21,16 +23,23 @@ public static class Helper
             "boolean" => Deserialize<bool>(setting.Value),
             _ => throw new Exception("Hatalı ayar gönderildi")
         };
+
+        static T? Deserialize<T>(string value)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(value);
+            }
+            catch
+            {
+                return default;
+            }
+        }
     }
-    public static T? Deserialize<T>(string value)
+   
+    public static string GetUserId(IHttpContextAccessor httpContextAccessor)
     {
-        try
-        {
-            return JsonConvert.DeserializeObject<T>(value);
-        }
-        catch
-        {
-            return default;
-        }
+        return httpContextAccessor?.HttpContext?.User?.FindFirstValue("id")
+                 ?? throw new Exception("UserId değeri alınamadı");
     }
 }
