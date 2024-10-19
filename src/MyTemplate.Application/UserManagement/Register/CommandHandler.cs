@@ -1,6 +1,6 @@
-﻿using System.Text;
+﻿using Common.Interfaces.Services;
+using Common.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
 using MyTemplate.Application.ApplicationManagement.Interfaces;
 
 namespace MyTemplate.Application.UserManagement.Register;
@@ -9,11 +9,13 @@ public class CommandHandler : CommandHandlerBase<Command>
 {
     private UserManager<ApplicationUser> _userManager;
     private readonly ISettingService _settingService;
+    private readonly IMessageService _messageService;
 
-    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService)
+    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService, IMessageService messageService)
     {
         _userManager = userManager;
         _settingService = settingService;
+        _messageService = messageService;
     }
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
@@ -37,10 +39,15 @@ public class CommandHandler : CommandHandlerBase<Command>
 
         if (emailConfirmRequired)
         {
-            string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
+            //string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 
-            // email.Send()
+            await _messageService.PublisAsync<MailSendEvent>(new()
+            {
+                Body = "Email Adresi Doğrulama",
+                Subject = "Email Adresi Doğrulama",
+                To = [request.Email]
+            }, cancellationToken);
         }
 
         return Result.WithSuccess();

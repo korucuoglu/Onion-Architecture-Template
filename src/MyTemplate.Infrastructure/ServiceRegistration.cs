@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyTemplate.Application.ApplicationManagement.Interfaces;
@@ -44,5 +45,14 @@ public static class ServiceRegistration
 
             return new SettingService(settings);
         });
+
+        services.AddMassTransit(x =>
+        {
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(configuration.GetValue<string>("RabbitMQ:Hostname"));
+            });
+        });
+
     }
 }

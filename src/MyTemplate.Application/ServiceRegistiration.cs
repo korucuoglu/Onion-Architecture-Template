@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MyTemplate.Infrastructure.Services;
 
 namespace MyTemplate.Application;
 
@@ -22,7 +23,6 @@ public static class ServiceRegistiration
        .AddNewtonsoftJson(opt =>
        {
            opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-           //opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
        });
 
         services.AddSingleton<ICacheService, RedisService>();
@@ -65,6 +65,8 @@ public static class ServiceRegistiration
                 .RequireAuthenticatedUser()
                 .Build();
         });
+
+        services.AddScoped<IMessageService, MessageService>();
 
         #endregion JWT
     }

@@ -10,12 +10,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 {
     public DbSet<Product> Product { get; set; }
     public DbSet<Setting> Setting { get; set; }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         ChangeTracker.LazyLoadingEnabled = false;
         ChangeTracker.AutoDetectChangesEnabled = false;
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -65,7 +67,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     }
 
     /// <summary>
-    /// CreatedDate ve UpdatedDate alanlarını boşsa doldurur. 
+    /// CreatedDate ve UpdatedDate alanlarını boşsa doldurur.
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>

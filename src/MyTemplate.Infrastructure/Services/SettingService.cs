@@ -3,9 +3,11 @@ using MyTemplate.Domain.Entities;
 using Newtonsoft.Json;
 
 namespace MyTemplate.Infrastructure.Services;
+
 public class SettingService : ISettingService
 {
     private readonly IEnumerable<Setting> _settings;
+
     public SettingService(IEnumerable<Setting> settings)
     {
         _settings = settings;
