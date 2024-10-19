@@ -1,13 +1,16 @@
 ﻿using Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using MyTemplate.Application.ApplicationManagement.Helpers;
 
 namespace MyTemplate.Application.UserManagement.ChangePassword;
+
 public class CommandHandler : CommandHandlerBase<Command>
 {
     private UserManager<ApplicationUser> _userManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IHashService _hashService;
+
     public CommandHandler(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, IHashService hashService)
     {
         _userManager = userManager;

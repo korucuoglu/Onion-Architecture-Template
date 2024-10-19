@@ -1,4 +1,5 @@
 ﻿namespace MyTemplate.Application.UserManagement;
+
 public class CustomResponseMessages
 {
     public const string UserNotFound = "Kullanıcı bulunamadı. Şifre veya kullanıcı adı yanlış.";

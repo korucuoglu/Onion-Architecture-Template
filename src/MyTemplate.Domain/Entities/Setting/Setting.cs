@@ -1,5 +1,5 @@
-﻿
-namespace MyTemplate.Domain.Entities;
+﻿namespace MyTemplate.Domain.Entities;
+
 public class Setting : BaseEntity<int>, IEntityWithDate
 {
     public string Key { get; set; }

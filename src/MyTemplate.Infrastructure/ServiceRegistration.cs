@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyTemplate.Application.ApplicationManagement.Interfaces;
 using MyTemplate.Domain.Entities;
+using MyTemplate.Infrastructure.Services;
 
 namespace MyTemplate.Infrastructure;
 
@@ -29,5 +31,18 @@ public static class ServiceRegistration
           .AddDefaultTokenProviders();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddSingleton<ISettingService>(provider =>
+        {
+            using var scope = provider.CreateScope();
+
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>().EF;
+
+            var settingRepository = unitOfWork.GetRepository<Setting, int>();
+
+            var settings = settingRepository.GetAll().ToList();
+
+            return new SettingService(settings);
+        });
     }
 }

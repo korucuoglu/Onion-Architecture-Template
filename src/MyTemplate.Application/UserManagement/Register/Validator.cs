@@ -1,4 +1,5 @@
 ﻿namespace MyTemplate.Application.UserManagement.Register;
+
 public class Validator : ValidatorBase<Command>
 {
     public Validator()

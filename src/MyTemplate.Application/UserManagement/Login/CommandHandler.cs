@@ -5,20 +5,23 @@ using Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MyTemplate.Application.ApplicationManagement.Interfaces;
 
 namespace MyTemplate.Application.UserManagement.Login;
-public class CommandHandler : CommandHandlerBase<Command, Dto> 
+
+public class CommandHandler : CommandHandlerBase<Command, Dto>
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IConfiguration _configuration;
     private readonly IHashService _hashService;
-    public CommandHandler(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork, IConfiguration configuration, IHashService hashService = null)
+    private readonly ISettingService _settingService;
+
+    public CommandHandler(UserManager<ApplicationUser> userManager, IConfiguration configuration, IHashService hashService, ISettingService settingService)
     {
         _userManager = userManager;
-        _unitOfWork = unitOfWork;
         _configuration = configuration;
         _hashService = hashService;
+        _settingService = settingService;
     }
 
     protected override async Task<Result<Dto>> HandleAsync(Command request, CancellationToken cancellationToken)
@@ -35,15 +38,9 @@ public class CommandHandler : CommandHandlerBase<Command, Dto>
             return Result<Dto>.WithFailure(Error.WithMessage(CustomResponseMessages.UserNotFound));
         }
 
-        await using var unitOfWork = _unitOfWork.EF;
+        var emailConfirmRequired = _settingService.EmailConfirmRequired();
 
-        var settingRepository = unitOfWork.GetRepository<Setting, int>();
-
-        var setting = await settingRepository.FirstOrDefaultAsync(x => x.Key == "EmailConfirmRequired");
-
-        var settingValue = Helper.GetSettingValue(setting);
-
-        if (settingValue is bool emailConfirmRequired && emailConfirmRequired && user.EmailConfirmed == false)
+        if (emailConfirmRequired && user.EmailConfirmed == false)
         {
             return Result<Dto>.WithFailure(Error.WithMessage(CustomResponseMessages.EmailNotConfirmed));
         }
@@ -53,6 +50,7 @@ public class CommandHandler : CommandHandlerBase<Command, Dto>
             AccessToken = CreateToken(user),
         });
     }
+
     private string CreateToken(ApplicationUser user)
     {
         var authClaims = new List<Claim>()

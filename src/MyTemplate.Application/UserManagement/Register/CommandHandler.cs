@@ -1,16 +1,19 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using MyTemplate.Application.ApplicationManagement.Interfaces;
 
 namespace MyTemplate.Application.UserManagement.Register;
+
 public class CommandHandler : CommandHandlerBase<Command>
 {
     private UserManager<ApplicationUser> _userManager;
-    private IUnitOfWork _unitOfWork;
-    public CommandHandler(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
+    private readonly ISettingService _settingService;
+
+    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService)
     {
         _userManager = userManager;
-        _unitOfWork = unitOfWork;
+        _settingService = settingService;
     }
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
@@ -30,24 +33,13 @@ public class CommandHandler : CommandHandlerBase<Command>
             return Result.WithFailure(Error.WithMessage(errMessage));
         }
 
-        await using var unitOfWork = _unitOfWork.EF;
+        var emailConfirmRequired = _settingService.EmailConfirmRequired();
 
-        var settingRepository = unitOfWork.GetRepository<Setting, int>();
-
-        var setting = await settingRepository.FirstOrDefaultAsync(x => x.Key == "EmailConfirmRequired");
-
-        if (setting is null)
-        {
-            return Result.WithSuccess();
-        }
-
-        var settingValue = Helper.GetSettingValue(setting);
-
-        if (settingValue is bool emailConfirmRequired && emailConfirmRequired)
+        if (emailConfirmRequired)
         {
             string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
-           
+
             // email.Send()
         }
 

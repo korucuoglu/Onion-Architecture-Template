@@ -1,5 +1,5 @@
-﻿
-namespace MyTemplate.Domain.Entities;
+﻿namespace MyTemplate.Domain.Entities;
+
 public class Product : BaseEntity<long>
 {
 }

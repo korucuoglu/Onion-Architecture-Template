@@ -1,15 +1,25 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+﻿using MyTemplate.Application.ApplicationManagement.Interfaces;
+using MyTemplate.Domain.Entities;
 using Newtonsoft.Json;
 
-namespace MyTemplate.Application;
-public static class Helper
+namespace MyTemplate.Infrastructure.Services;
+public class SettingService : ISettingService
 {
-    public static object? GetSettingValue(Setting? setting)
+    private readonly IEnumerable<Setting> _settings;
+    public SettingService(IEnumerable<Setting> settings)
     {
+        _settings = settings;
+    }
+
+    public bool EmailConfirmRequired() => (bool)GetSettingValue("EmailConfirmRequired");
+
+    private object? GetSettingValue(string key)
+    {
+        var setting = _settings.FirstOrDefault(x => x.Key == key);
+
         if (setting is null)
         {
-            return null;
+            return default;
         }
 
         return setting.DataType switch
@@ -21,7 +31,7 @@ public static class Helper
             "string" => Deserialize<string>(setting.Value),
             "string[]" => Deserialize<string[]>(setting.Value),
             "boolean" => Deserialize<bool>(setting.Value),
-            _ => throw new Exception("Hatalı ayar gönderildi")
+            _ => default
         };
 
         static T? Deserialize<T>(string value)
@@ -35,11 +45,5 @@ public static class Helper
                 return default;
             }
         }
-    }
-   
-    public static string GetUserId(IHttpContextAccessor httpContextAccessor)
-    {
-        return httpContextAccessor?.HttpContext?.User?.FindFirstValue("id")
-                 ?? throw new Exception("UserId değeri alınamadı");
     }
 }

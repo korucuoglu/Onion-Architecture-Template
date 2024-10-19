@@ -1,20 +1,24 @@
 ﻿using Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using MyTemplate.Application.ApplicationManagement.Helpers;
+using MyTemplate.Application.ApplicationManagement.Interfaces;
 
 namespace MyTemplate.Application.UserManagement.Update;
+
 public class CommandHandler : CommandHandlerBase<Command>
 {
     private UserManager<ApplicationUser> _userManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IHashService _hashService;
-    private readonly IUnitOfWork _unitOfWork;
-    public CommandHandler(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, IHashService hashService, IUnitOfWork unitOfWork)
+    private readonly ISettingService _settingService;
+
+    public CommandHandler(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, IHashService hashService, ISettingService settingService)
     {
         _userManager = userManager;
         _httpContextAccessor = httpContextAccessor;
         _hashService = hashService;
-        _unitOfWork = unitOfWork;
+        _settingService = settingService;
     }
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
@@ -37,7 +41,7 @@ public class CommandHandler : CommandHandlerBase<Command>
 
         var isEmailChanged = user.Email!.Equals(request.Email) == false; // email değişti mi?
 
-        user.EmailConfirmed = isEmailChanged ? false : user.EmailConfirmed; // Email'ini değiştirmesi durumunda "false" olur. 
+        user.EmailConfirmed = isEmailChanged ? false : user.EmailConfirmed; // Email'ini değiştirmesi durumunda "false" olur.
         user.Email = request.Email;
 
         var result = await _userManager.UpdateAsync(user);
@@ -49,24 +53,13 @@ public class CommandHandler : CommandHandlerBase<Command>
             return Result.WithFailure(Error.WithMessage(errMessage));
         }
 
-        await SendMailAsync();
+        var emailConfirmRequired = _settingService.EmailConfirmRequired();
 
-        return Result.WithSuccess();
-    }
-
-    private async Task SendMailAsync()
-    {
-        await using var unitOfWork = _unitOfWork.EF;
-
-        var settingRepository = unitOfWork.GetRepository<Setting, int>();
-
-        var setting = await settingRepository.FirstOrDefaultAsync(x => x.Key == "EmailConfirmRequired");
-
-        var settingValue = Helper.GetSettingValue(setting);
-
-        if (settingValue is bool emailConfirmRequired && emailConfirmRequired)
+        if (emailConfirmRequired && isEmailChanged)
         {
             // await SendMail();
         }
+
+        return Result.WithSuccess();
     }
 }

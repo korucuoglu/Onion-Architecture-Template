@@ -1,4 +1,5 @@
 ﻿namespace MyTemplate.Application.UserManagement.ChangePassword;
+
 public class Validator : ValidatorBase<Command>
 {
     public Validator()

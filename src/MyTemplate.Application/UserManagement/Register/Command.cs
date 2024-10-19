@@ -1,5 +1,6 @@
 ﻿namespace MyTemplate.Application.UserManagement.Register;
-public class Command: CommandBase
+
+public class Command : CommandBase
 {
     public string Username { get; set; }
     public string Email { get; set; }
