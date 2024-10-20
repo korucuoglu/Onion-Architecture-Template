@@ -19,14 +19,27 @@ public class MailService
     {
         using SmtpClient client = new(_mailSetting.Host)
         {
+            Host = _mailSetting.Host,
             Port = _mailSetting.Port,
-            Credentials = new NetworkCredential(_mailSetting.Username, _mailSetting.Password),
             EnableSsl = true,
+            DeliveryMethod = SmtpDeliveryMethod.Network,
+            UseDefaultCredentials = false,
+            Credentials = new NetworkCredential(_mailSetting.Username, _mailSetting.Password)
         };
 
         foreach (var to in mailSendEvent.To)
         {
-            await client.SendMailAsync(_mailSetting.Address, to, mailSendEvent.Subject, mailSendEvent.Body);
+            using MailMessage mailMessage = new()
+            {
+                From = new MailAddress(_mailSetting.Address),
+                Subject = mailSendEvent.Subject,
+                Body = mailSendEvent.Body,
+                IsBodyHtml = true // HTML olarak gönderilmesini sağlar
+            };
+
+            mailMessage.To.Add(to);
+
+            await client.SendMailAsync(mailMessage);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Common.Builders;
 using Common.Interfaces;
 using Common.Interfaces.Services;
 using Common.Models;
@@ -25,19 +26,37 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
 
     protected override async Task HandleAsync(UserCreatedEvent notification, CancellationToken cancellationToken)
     {
+        var templateContent = await GetTemplateAsync(cancellationToken);
+
         var confirmUrl = await GenerateConfirmUrlAsync(notification.User);
+
+        var replaceBuilder = new ReplaceBuilder(templateContent)
+                                 .Replace("{{ConfirmUrl}}", confirmUrl);
 
         await _messageService.PublisAsync<MailSendEvent>(new()
         {
             Subject = "Email Adresi Doğrulama",
-            Body = confirmUrl,
+            Body = replaceBuilder.Value,
             To = [notification.User.Email!]
         }, cancellationToken);
     }
 
+    private async Task<string> GetTemplateAsync(CancellationToken cancellationToken)
+    {
+        var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Email", "Register.html");
+
+        if (!File.Exists(templatePath))
+        {
+            throw new FileNotFoundException("Email şablonu bulunamadı.", templatePath);
+        }
+
+        return await File.ReadAllTextAsync(templatePath, cancellationToken);
+    }
+
     private async Task<string> GenerateConfirmUrlAsync(ApplicationUser user)
     {
-        var baseUrl = _configuration.GetValue<string>("ClientApp:Url") ?? throw new Exception("BaseUrl boş olamaz");
+        var baseUrl = _configuration.GetValue<string>("ClientApp:Url")
+                      ?? throw new InvalidOperationException("ClientApp:Url ayarı yapılandırılmamış.");
 
         string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));

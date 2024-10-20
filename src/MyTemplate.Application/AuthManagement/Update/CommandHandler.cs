@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using MyTemplate.Application.ApplicationManagement.Helpers;
 using MyTemplate.Application.ApplicationManagement.Interfaces;
-using MyTemplate.Application.AuthManagement;
 
 namespace MyTemplate.Application.AuthManagement.Update;
 
