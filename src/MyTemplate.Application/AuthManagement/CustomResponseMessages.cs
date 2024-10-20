@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.UserManagement;
+﻿namespace MyTemplate.Application.AuthManagement;
 
 public class CustomResponseMessages
 {

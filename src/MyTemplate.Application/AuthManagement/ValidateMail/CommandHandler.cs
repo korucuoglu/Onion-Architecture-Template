@@ -3,8 +3,9 @@ using Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using MyTemplate.Application.ApplicationManagement.Interfaces;
+using MyTemplate.Application.AuthManagement;
 
-namespace MyTemplate.Application.UserManagement.ValidateMail;
+namespace MyTemplate.Application.AuthManagement.ValidateMail;
 
 public class CommandHandler : CommandHandlerBase<Command>
 {

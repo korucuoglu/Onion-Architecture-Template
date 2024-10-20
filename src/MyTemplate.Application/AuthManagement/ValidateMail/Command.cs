@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.UserManagement.ValidateMail;
+﻿namespace MyTemplate.Application.AuthManagement.ValidateMail;
 
 public class Command : CommandBase
 {

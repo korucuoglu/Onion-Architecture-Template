@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 
-namespace MyTemplate.Application.UserManagement.Register;
+namespace MyTemplate.Application.AuthManagement.Register;
 
 internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEvent>
 {

@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.UserManagement.Register;
+﻿namespace MyTemplate.Application.AuthManagement.Register;
 
 public class UserCreatedEvent : NotificationBase
 {

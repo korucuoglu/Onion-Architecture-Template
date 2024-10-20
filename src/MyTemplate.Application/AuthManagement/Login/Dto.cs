@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.UserManagement.Login;
+﻿namespace MyTemplate.Application.AuthManagement.Login;
 
 public class Dto
 {

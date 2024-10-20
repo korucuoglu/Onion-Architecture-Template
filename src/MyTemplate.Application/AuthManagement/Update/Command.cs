@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.UserManagement.Update;
+﻿namespace MyTemplate.Application.AuthManagement.Update;
 
 public class Command : CommandBase
 {

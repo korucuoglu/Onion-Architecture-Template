@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using MyTemplate.Application.ApplicationManagement.Interfaces;
 
-namespace MyTemplate.Application.UserManagement.Register;
+namespace MyTemplate.Application.AuthManagement.Register;
 
 public class CommandHandler : CommandHandlerBase<Command>
 {

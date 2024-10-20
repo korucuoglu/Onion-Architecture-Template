@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MyTemplate.Application.ApplicationManagement.Interfaces;
+using MyTemplate.Application.AuthManagement;
 
-namespace MyTemplate.Application.UserManagement.Login;
+namespace MyTemplate.Application.AuthManagement.Login;
 
 public class CommandHandler : CommandHandlerBase<Command, Dto>
 {
