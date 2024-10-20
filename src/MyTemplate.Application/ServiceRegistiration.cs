@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using MyTemplate.Infrastructure.Services;
 
 namespace MyTemplate.Application;
 
@@ -27,14 +26,19 @@ public static class ServiceRegistiration
 
         services.AddSingleton<ICacheService, RedisService>();
         services.AddSingleton<IHashService, HashService>();
+        services.AddScoped<IMessageService, MessageService>();
+
 
         services.AddCors(opt =>
         {
             opt.AddPolicy(name: "CorsPolicy", builder =>
             {
-                builder.AllowAnyOrigin()
+                var baseUrl = configuration.GetValue<string>("ClientApp:Url") ?? throw new Exception("BaseUrl boş olamaz");
+
+                builder.WithOrigins(baseUrl)
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
         });
 
@@ -59,14 +63,11 @@ public static class ServiceRegistiration
             };
         });
 
-        services.AddAuthorization(options =>
-        {
-            options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser()
-                .Build();
-        });
+        services.AddAuthorizationBuilder()
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+            .RequireAuthenticatedUser()
+            .Build());
 
-        services.AddScoped<IMessageService, MessageService>();
 
         #endregion JWT
     }

@@ -6,6 +6,11 @@ namespace MyTemplate.API.Controllers;
 [Route("api/[controller]")]
 public class AuthController : BaseApiController
 {
+
+    [HttpGet("validate-mail")]
+    public async Task<IActionResult> ValidateMailAsync([FromQuery] Application.UserManagement.ValidateMail.Command command)
+     => Result(await Mediator.Send(command));
+
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAsync([FromBody] Application.UserManagement.Register.Command command)
       => Result(await Mediator.Send(command));

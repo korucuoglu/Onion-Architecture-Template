@@ -53,6 +53,5 @@ public static class ServiceRegistration
                 cfg.Host(configuration.GetValue<string>("RabbitMQ:Hostname"));
             });
         });
-
     }
 }

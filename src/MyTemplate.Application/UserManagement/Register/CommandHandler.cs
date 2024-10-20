@@ -1,5 +1,4 @@
-﻿using Common.Interfaces.Services;
-using Common.Models;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MyTemplate.Application.ApplicationManagement.Interfaces;
 
@@ -9,13 +8,13 @@ public class CommandHandler : CommandHandlerBase<Command>
 {
     private UserManager<ApplicationUser> _userManager;
     private readonly ISettingService _settingService;
-    private readonly IMessageService _messageService;
+    private readonly IMediator _mediator;
 
-    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService, IMessageService messageService)
+    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService, IMediator mediator)
     {
         _userManager = userManager;
         _settingService = settingService;
-        _messageService = messageService;
+        _mediator = mediator;
     }
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
@@ -39,14 +38,9 @@ public class CommandHandler : CommandHandlerBase<Command>
 
         if (emailConfirmRequired)
         {
-            //string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            //string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
-
-            await _messageService.PublisAsync<MailSendEvent>(new()
+            await _mediator.Publish<UserCreatedEvent>(new()
             {
-                Body = "Email Adresi Doğrulama",
-                Subject = "Email Adresi Doğrulama",
-                To = [request.Email]
+                User = user,
             }, cancellationToken);
         }
 
