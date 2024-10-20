@@ -6,6 +6,7 @@ using Common.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using H = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
 
 namespace MyTemplate.Application.AuthManagement.Register;
 
@@ -26,13 +27,16 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
 
     protected override async Task HandleAsync(UserCreatedEvent notification, CancellationToken cancellationToken)
     {
-        var templateContent = await GetTemplateAsync(cancellationToken);
+        var clientAppUrl = H.GetValueFromConfiguration<string>(_configuration, "ClientApp:Url");
 
-        var confirmUrl = await GenerateConfirmUrlAsync(notification.User);
+        var templateContent = await H.GetHtmlTemplateAsync(cancellationToken, "Templates", "Email", "Register.mjml");
+
+        var confirmUrl = await GenerateConfirmUrlAsync(notification.User, clientAppUrl);
 
         var replaceBuilder = new ReplaceBuilder(templateContent)
-                                 .Replace("{{ConfirmUrl}}", confirmUrl);
-
+                                 .Replace("{{confirmUrl}}", confirmUrl)
+                                 .Replace("{{companyName}}", clientAppUrl)
+                                 ;
         await _messageService.PublisAsync<MailSendEvent>(new()
         {
             Subject = "Email Adresi Doğrulama",
@@ -41,27 +45,13 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
         }, cancellationToken);
     }
 
-    private async Task<string> GetTemplateAsync(CancellationToken cancellationToken)
+   
+    private async Task<string> GenerateConfirmUrlAsync(ApplicationUser user, string clientAppUrl)
     {
-        var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Email", "Register.html");
-
-        if (!File.Exists(templatePath))
-        {
-            throw new FileNotFoundException("Email şablonu bulunamadı.", templatePath);
-        }
-
-        return await File.ReadAllTextAsync(templatePath, cancellationToken);
-    }
-
-    private async Task<string> GenerateConfirmUrlAsync(ApplicationUser user)
-    {
-        var baseUrl = _configuration.GetValue<string>("ClientApp:Url")
-                      ?? throw new InvalidOperationException("ClientApp:Url ayarı yapılandırılmamış.");
-
         string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         string encodedConfirmationToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationToken));
 
-        string link = $"{baseUrl}/api/auth/validate-mail?userId={_hashService.Encode(user.Id)}&token={encodedConfirmationToken}";
+        string link = $"{clientAppUrl}/api/auth/validate-mail?userId={_hashService.Encode(user.Id)}&token={encodedConfirmationToken}";
 
         return link;
     }

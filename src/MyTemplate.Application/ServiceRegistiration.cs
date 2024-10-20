@@ -33,9 +33,9 @@ public static class ServiceRegistiration
         {
             opt.AddPolicy(name: "CorsPolicy", builder =>
             {
-                var baseUrl = configuration.GetValue<string>("ClientApp:Url") ?? throw new Exception("BaseUrl boş olamaz");
+                var clientAppUrl = ApplicationManagement.Helpers.Helper.GetValueFromConfiguration<string>(configuration, "ClientApp:Url");
 
-                builder.WithOrigins(baseUrl)
+                builder.WithOrigins(clientAppUrl)
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
