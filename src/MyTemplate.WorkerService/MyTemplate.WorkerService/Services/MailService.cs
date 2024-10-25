@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using Common.Models;
+using Common.Events;
 using Microsoft.Extensions.Options;
 using MyTemplate.WorkerService.Models;
 

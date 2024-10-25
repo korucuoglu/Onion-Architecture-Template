@@ -1,31 +1,26 @@
-﻿using Common.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using MyTemplate.Application.ApplicationManagement.Helpers;
-using MyTemplate.Application.ApplicationManagement.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using MyTemplate.Application.ApplicationManagement.Services;
+using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Application.AuthManagement.Update;
 
 public class CommandHandler : CommandHandlerBase<Command>
 {
-    private UserManager<ApplicationUser> _userManager;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IHashService _hashService;
+    
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISettingService _settingService;
+    private readonly IUserContextAccessor _userContextAccessor;
 
-    public CommandHandler(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, IHashService hashService, ISettingService settingService)
+    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService, IUserContextAccessor userContextAccessor)
     {
         _userManager = userManager;
-        _httpContextAccessor = httpContextAccessor;
-        _hashService = hashService;
         _settingService = settingService;
+        _userContextAccessor = userContextAccessor;
     }
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
     {
-        var encodedUserId = Helper.GetUserId(_httpContextAccessor);
-
-        var userId = _hashService.Decode(encodedUserId);
+        var userId = _userContextAccessor.UserId;
 
         var user = await _userManager.FindByIdAsync(userId.ToString());
 

@@ -1,5 +1,7 @@
-﻿using MyTemplate.Application.ApplicationManagement.Interfaces;
+﻿using Common.Exceptions;
+using MyTemplate.Application.ApplicationManagement.Services;
 using MyTemplate.Domain.Entities;
+using MyTemplate.Domain.Entities.Setting;
 using Newtonsoft.Json;
 
 namespace MyTemplate.Infrastructure.Services;
@@ -15,14 +17,9 @@ public class SettingService : ISettingService
 
     public bool EmailConfirmRequired() => (bool)GetSettingValue("EmailConfirmRequired");
 
-    private object? GetSettingValue(string key)
+    private object GetSettingValue(string key)
     {
-        var setting = _settings.FirstOrDefault(x => x.Key == key);
-
-        if (setting is null)
-        {
-            return default;
-        }
+        var setting = _settings.First(x => x.Key == key);
 
         return setting.DataType switch
         {
@@ -33,19 +30,12 @@ public class SettingService : ISettingService
             "string" => Deserialize<string>(setting.Value),
             "string[]" => Deserialize<string[]>(setting.Value),
             "boolean" => Deserialize<bool>(setting.Value),
-            _ => default
+            _ => throw new CustomException("Bilinmeyen bir veri tipi girildi.")
         };
 
-        static T? Deserialize<T>(string value)
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(value);
-            }
-            catch
-            {
-                return default;
-            }
+        static T Deserialize<T>(string value)
+        { 
+            return JsonConvert.DeserializeObject<T>(value)!;
         }
     }
 }

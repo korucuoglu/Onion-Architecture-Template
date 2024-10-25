@@ -1,5 +1,4 @@
-﻿using Common.Controller;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyTemplate.API.Controllers;

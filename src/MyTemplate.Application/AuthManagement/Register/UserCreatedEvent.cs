@@ -1,6 +1,8 @@
-﻿namespace MyTemplate.Application.AuthManagement.Register;
+﻿using MyTemplate.Domain.Entities.Identity;
+
+namespace MyTemplate.Application.AuthManagement.Register;
 
 public class UserCreatedEvent : NotificationBase
 {
-    public ApplicationUser User { get; set; }
+    public required ApplicationUser User { get; set; }
 }

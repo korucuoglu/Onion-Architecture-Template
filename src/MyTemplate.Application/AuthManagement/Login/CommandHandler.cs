@@ -1,29 +1,22 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Common.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using MyTemplate.Application.ApplicationManagement.Interfaces;
-using MyTemplate.Application.AuthManagement;
+﻿using Microsoft.AspNetCore.Identity;
+using MyTemplate.Application.ApplicationManagement.Services;
+using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Application.AuthManagement.Login;
 
 public class CommandHandler : CommandHandlerBase<Command, Dto>
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IConfiguration _configuration;
-    private readonly IHashService _hashService;
     private readonly ISettingService _settingService;
+    private readonly ITokenService _tokenService;
 
-    public CommandHandler(UserManager<ApplicationUser> userManager, IConfiguration configuration, IHashService hashService, ISettingService settingService)
+    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService, ITokenService tokenService)
     {
         _userManager = userManager;
-        _configuration = configuration;
-        _hashService = hashService;
         _settingService = settingService;
+        _tokenService = tokenService;
     }
+
 
     protected override async Task<Result<Dto>> HandleAsync(Command request, CancellationToken cancellationToken)
     {
@@ -46,29 +39,11 @@ public class CommandHandler : CommandHandlerBase<Command, Dto>
             return Result<Dto>.WithFailure(Error.WithMessage(CustomResponseMessages.EmailNotConfirmed));
         }
 
+        var accessToken = _tokenService.CreateToken(user.Id, DateTime.Now.AddDays(3));
+
         return Result<Dto>.WithSuccess(new()
         {
-            AccessToken = CreateToken(user),
+            AccessToken = accessToken,
         });
-    }
-
-    private string CreateToken(ApplicationUser user)
-    {
-        var authClaims = new List<Claim>()
-        {
-            new("id", _hashService.Encode(user.Id)),
-        };
-
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["JWT:ValidIssuer"],
-            audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddDays(3),
-            claims: authClaims,
-            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

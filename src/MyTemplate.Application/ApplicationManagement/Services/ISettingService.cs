@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.ApplicationManagement.Interfaces;
+﻿namespace MyTemplate.Application.ApplicationManagement.Services;
 
 public interface ISettingService
 {

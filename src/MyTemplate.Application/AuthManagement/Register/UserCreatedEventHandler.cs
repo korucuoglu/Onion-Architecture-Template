@@ -1,11 +1,11 @@
 ﻿using System.Text;
 using Common.Builders;
-using Common.Interfaces;
-using Common.Interfaces.Services;
-using Common.Models;
+using Common.Events;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using MyTemplate.Application.ApplicationManagement.Services;
+using MyTemplate.Domain.Entities.Identity;
 using H = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
 
 namespace MyTemplate.Application.AuthManagement.Register;

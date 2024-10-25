@@ -1,4 +1,4 @@
-using Common.Middlewares;
+using MyTemplate.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +16,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHealtCheck();
+app.UseGlobalExceptionHandler();
 
 app.MapControllers();
 app.Run();

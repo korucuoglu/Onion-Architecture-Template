@@ -7,12 +7,6 @@ namespace MyTemplate.Application.ApplicationManagement.Helpers;
 
 public static class Helper
 {
-    public static string GetUserId(IHttpContextAccessor httpContextAccessor)
-    {
-        return httpContextAccessor?.HttpContext?.User?.FindFirstValue("id")
-                 ?? throw new Exception("UserId değeri alınamadı");
-    }
-
     public static async Task<string> GetHtmlTemplateAsync(CancellationToken cancellationToken = default, params string[] path)
     {
         var templatePath = Path.Combine(Directory.GetCurrentDirectory(), Path.Combine(path));

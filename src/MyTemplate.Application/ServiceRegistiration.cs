@@ -1,9 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
 using Common;
-using Common.Interfaces;
-using Common.Interfaces.Services;
-using Common.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -24,11 +21,6 @@ public static class ServiceRegistiration
            opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
        });
 
-        services.AddSingleton<ICacheService, RedisService>();
-        services.AddSingleton<IHashService, HashService>();
-        services.AddScoped<IMessageService, MessageService>();
-
-
         services.AddCors(opt =>
         {
             opt.AddPolicy(name: "CorsPolicy", builder =>
@@ -41,7 +33,6 @@ public static class ServiceRegistiration
                     .AllowCredentials();
             });
         });
-
         #region JWT
 
         services.AddAuthentication(options =>

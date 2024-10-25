@@ -1,9 +1,8 @@
 ﻿using System.Text;
-using Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using MyTemplate.Application.ApplicationManagement.Interfaces;
-using MyTemplate.Application.AuthManagement;
+using MyTemplate.Application.ApplicationManagement.Services;
+using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Application.AuthManagement.ValidateMail;
 

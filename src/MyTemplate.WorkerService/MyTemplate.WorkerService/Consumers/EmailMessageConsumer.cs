@@ -1,4 +1,4 @@
-﻿using Common.Models;
+﻿using Common.Events;
 using MassTransit;
 using MyTemplate.WorkerService.Services;
 

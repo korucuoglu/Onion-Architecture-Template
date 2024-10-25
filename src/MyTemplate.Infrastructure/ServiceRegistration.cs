@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MyTemplate.Application.ApplicationManagement.Interfaces;
-using MyTemplate.Domain.Entities;
+using MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
+using MyTemplate.Application.ApplicationManagement.Services;
+using MyTemplate.Domain.Entities.Identity;
+using MyTemplate.Domain.Entities.Setting;
 using MyTemplate.Infrastructure.Services;
 
 namespace MyTemplate.Infrastructure;
@@ -14,7 +16,6 @@ public static class ServiceRegistration
     {
         services.AddDbContext<ApplicationDbContext>(opt =>
         {
-            opt.EnableSensitiveDataLogging(true);
             opt.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), configure =>
             {
                 configure.MigrationsAssembly("MyTemplate.Infrastructure"); // Migrationlar bu projede saklanacak
@@ -31,7 +32,7 @@ public static class ServiceRegistration
         }).AddEntityFrameworkStores<ApplicationDbContext>()
           .AddDefaultTokenProviders();
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+     
 
         services.AddSingleton<ISettingService>(provider =>
         {
@@ -53,5 +54,12 @@ public static class ServiceRegistration
                 cfg.Host(configuration.GetValue<string>("RabbitMQ:Hostname"));
             });
         });
+        
+        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+        services.AddScoped<IUserContextAccessor, UserContextAccessor>();
+        services.AddSingleton<ITokenService, TokenService>();
+        services.AddSingleton<ICacheService, RedisService>();
+        services.AddSingleton<IHashService, HashService>();
     }
 }

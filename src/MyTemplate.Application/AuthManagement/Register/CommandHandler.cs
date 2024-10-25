@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using MyTemplate.Application.ApplicationManagement.Interfaces;
+using MyTemplate.Application.ApplicationManagement.Services;
+using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Application.AuthManagement.Register;
 
 public class CommandHandler : CommandHandlerBase<Command>
 {
-    private UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISettingService _settingService;
     private readonly IMediator _mediator;
 
@@ -38,7 +39,7 @@ public class CommandHandler : CommandHandlerBase<Command>
 
         if (emailConfirmRequired)
         {
-            await _mediator.Publish<UserCreatedEvent>(new()
+            _= _mediator.Publish<UserCreatedEvent>(new()
             {
                 User = user,
             }, cancellationToken);

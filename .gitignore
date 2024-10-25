@@ -254,3 +254,5 @@ vs/
 Common/nuget.config
 
 .vs/
+
+.idea/.idea.MyTemplate/.idea/

@@ -1,8 +1,9 @@
 ﻿using Common.Extensions;
-using Common.Interfaces.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using MyTemplate.Domain.Entities;
+using MyTemplate.Domain.Entities.Identity;
+using MyTemplate.Domain.Entities.Setting;
 
 namespace MyTemplate.Infrastructure.Context;
 

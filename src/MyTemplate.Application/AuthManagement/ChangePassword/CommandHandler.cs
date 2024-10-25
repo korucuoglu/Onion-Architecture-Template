@@ -1,29 +1,28 @@
-﻿using Common.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using MyTemplate.Application.ApplicationManagement.Helpers;
-using MyTemplate.Application.AuthManagement;
+﻿using Microsoft.AspNetCore.Identity;
+using MyTemplate.Application.ApplicationManagement.Services;
+using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Application.AuthManagement.ChangePassword;
 
 public class CommandHandler : CommandHandlerBase<Command>
 {
     private UserManager<ApplicationUser> _userManager;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IHashService _hashService;
+    private readonly IUserContextAccessor _userContextAccessor;
 
-    public CommandHandler(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, IHashService hashService)
+    public CommandHandler(UserManager<ApplicationUser> userManager, IUserContextAccessor userContextAccessor)
     {
         _userManager = userManager;
-        _httpContextAccessor = httpContextAccessor;
-        _hashService = hashService;
+        _userContextAccessor = userContextAccessor;
     }
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
     {
-        var encodedUserId = Helper.GetUserId(_httpContextAccessor);
-
-        var userId = _hashService.Decode(encodedUserId);
+        if (!_userContextAccessor.IsAuthenticated)
+        {
+            return Result.WithFailure(Error.WithMessage(CustomResponseMessages.UnAuthenticated));
+        }
+        
+        var userId = _userContextAccessor.UserId;
 
         var user = await _userManager.FindByIdAsync(userId.ToString());
 

@@ -1,4 +1,7 @@
-﻿namespace MyTemplate.Infrastructure;
+﻿using MyTemplate.Application.ApplicationManagement.Repositories.EF;
+using MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
+
+namespace MyTemplate.Infrastructure.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork
 {

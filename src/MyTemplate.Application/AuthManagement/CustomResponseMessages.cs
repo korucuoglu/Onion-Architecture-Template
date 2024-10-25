@@ -2,6 +2,8 @@
 
 public class CustomResponseMessages
 {
+    public const string UnAuthenticated = "Sisteme giriş yapılmamış.";
+    public const string UnAuthorized = "Yetkisiz giriş tespit edildi";
     public const string UserNotFound = "Kullanıcı bulunamadı. Şifre veya kullanıcı adı yanlış.";
     public const string EmailNotConfirmed = "Email adresi henüz onaylanmamış. ";
     public const string InvalidUrl = "Bu link geçersizdir.";

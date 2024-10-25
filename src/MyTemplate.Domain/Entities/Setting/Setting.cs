@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Domain.Entities;
+﻿namespace MyTemplate.Domain.Entities.Setting;
 
 public class Setting : BaseEntity<int>, IEntityWithDate
 {
