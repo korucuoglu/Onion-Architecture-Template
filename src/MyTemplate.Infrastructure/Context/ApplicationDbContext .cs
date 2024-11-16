@@ -76,12 +76,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     {
         foreach (var changedEntity in ChangeTracker.Entries<IEntityWithDate>())
         {
-            if (changedEntity.State == EntityState.Added && changedEntity.Entity.CreatedDate.HasValue == false)
+            if (changedEntity.State == EntityState.Added)
             {
                 changedEntity.Entity.CreatedDate = DateTimeOffset.Now.ToDateTime(TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"));
             }
 
-            if (changedEntity.State == EntityState.Modified && changedEntity.Entity.UpdatedDate.HasValue == false)
+            else if (changedEntity.State == EntityState.Modified)
             {
                 changedEntity.Entity.UpdatedDate = DateTimeOffset.Now.ToDateTime(TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"));
             }

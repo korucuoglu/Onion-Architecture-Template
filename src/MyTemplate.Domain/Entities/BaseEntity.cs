@@ -11,7 +11,7 @@ public class BaseEntity<T>
 
 public interface IEntityWithDate
 {
-    public DateTime? CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
     public DateTime? UpdatedDate { get; set; }
 }
 
