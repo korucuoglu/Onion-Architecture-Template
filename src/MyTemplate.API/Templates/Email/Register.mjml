@@ -29,7 +29,7 @@
           Eğer buton çalışmıyorsa, aşağıdaki bağlantıyı tarayıcınıza kopyalayın:
         </mj-text>
         <mj-text font-size="14px" color="#4CAF50" line-height="1.5" padding="0 25px">
-          {{confirmUrl}}
+          {{url}}
         </mj-text>
         <mj-divider border-color="#cccccc" />
         <mj-text font-size="14px" color="#999999" line-height="1.5" align="center" padding="10px 25px">

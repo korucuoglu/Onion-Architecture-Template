@@ -41,7 +41,7 @@ public class CommandHandler : CommandHandlerBase<Command>
 
         if (!result.Succeeded)
         {
-            var errMessage = result.Errors.FirstOrDefault()?.Description ?? "Şifre güncellenemedi";
+            var errMessage = result.Errors.FirstOrDefault()?.Description ?? "Parola güncellenemedi";
 
             return Result.WithFailure(Error.WithMessage(errMessage));
         }

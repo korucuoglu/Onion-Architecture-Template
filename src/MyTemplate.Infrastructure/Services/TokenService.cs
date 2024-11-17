@@ -1,8 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Common.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MyTemplate.Application.ApplicationManagement.Common.Constants;
 using MyTemplate.Application.ApplicationManagement.Services;
 using ClaimTypes = MyTemplate.Application.ApplicationManagement.Common.Constants.ClaimTypes;
 
@@ -67,7 +69,7 @@ public class TokenService: ITokenService
 
         if (princilal is null)
         {
-            throw new Exception("Token doğrulanamadı");
+            throw new CustomException(CustomResponseMessages.InvalidToken);
         }
         
         var userId = princilal.Claims.First(c => c.Type == ClaimTypes.Id).Value;
