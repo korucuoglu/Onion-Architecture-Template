@@ -1,6 +1,5 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.Identity;
+using MyTemplate.Application.ApplicationManagement.Common.Constants;
 using MyTemplate.Application.ApplicationManagement.Services;
 using MyTemplate.Domain.Entities.Identity;
 
@@ -9,14 +8,14 @@ namespace MyTemplate.Application.AuthManagement.ValidateMail;
 public class CommandHandler : CommandHandlerBase<Command>
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IHashService _hashService;
     private readonly ISettingService _settingService;
+    private readonly ITokenService _tokenService;
 
-    public CommandHandler(UserManager<ApplicationUser> userManager, IHashService hashService, ISettingService settingService)
+    public CommandHandler(UserManager<ApplicationUser> userManager, ISettingService settingService, ITokenService tokenService)
     {
         _userManager = userManager;
-        _hashService = hashService;
         _settingService = settingService;
+        _tokenService = tokenService;
     }
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
@@ -26,7 +25,7 @@ public class CommandHandler : CommandHandlerBase<Command>
             return Result.WithFailure(Error.WithMessage(CustomResponseMessages.InvalidUrl));
         }
 
-        var userId = _hashService.Decode(request.UserId);
+        var userId = _tokenService.GetUserId(request.Token);
 
         var user = await _userManager.FindByIdAsync(userId.ToString());
 
@@ -40,17 +39,17 @@ public class CommandHandler : CommandHandlerBase<Command>
             return Result.WithFailure(Error.WithMessage(CustomResponseMessages.InvalidUrl));
         }
 
-        var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-        var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+        var result = await _userManager.ConfirmEmailAsync(user, token);
 
         if (!result.Succeeded)
         {
-            return Result.WithFailure(Error.WithMessage(CustomResponseMessages.InvalidUrl));
+            var errMessage = result.Errors.FirstOrDefault()?.Description ?? CustomResponseMessages.InvalidUrl;
+            
+            return Result.WithFailure(Error.WithMessage(errMessage));
         }
-
-        await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
+        
         return Result.WithSuccess();
     }
 }

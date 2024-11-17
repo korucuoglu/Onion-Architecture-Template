@@ -1,7 +1,7 @@
 ﻿using System.Security.Authentication;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using MyTemplate.Application.ApplicationManagement.Services;
+using ClaimTypes = MyTemplate.Application.ApplicationManagement.Common.Constants.ClaimTypes;
 
 namespace MyTemplate.Infrastructure.Services;
 
@@ -16,8 +16,9 @@ public class UserContextAccessor : IUserContextAccessor
         _hashService = hashService;
     }
 
-    public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
-    public int UserId =>_hashService.Decode(EncodedUserId);
+    public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
+    public int UserId => _hashService.Decode(EncodedUserId);
+
     public string EncodedUserId
     {
         get
@@ -26,8 +27,8 @@ public class UserContextAccessor : IUserContextAccessor
             {
                 throw new AuthenticationException();
             }
-            
-            return _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+            return _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Id)!.Value;
         }
     }
 }

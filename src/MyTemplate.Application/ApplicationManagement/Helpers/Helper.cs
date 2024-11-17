@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Mjml.Net;
 
 namespace MyTemplate.Application.ApplicationManagement.Helpers;
@@ -40,7 +38,7 @@ public static class Helper
         throw new FileNotFoundException("İlgili dosyanın html veya mjml formatında olması gerekmektedir.");
     }
 
-    public static T GetValueFromConfiguration<T>(IConfiguration configuration, string key, bool isRequired = true)
+    public static T? GetValueFromConfiguration<T>(IConfiguration configuration, string key, bool isRequired = true)
     {
         var value = configuration.GetValue<T>(key);
 
@@ -49,6 +47,6 @@ public static class Helper
             throw new InvalidOperationException($"{key} ayarı yapılandırılmamış.");
         }
 
-        return value!;
+        return value;
     }
 }

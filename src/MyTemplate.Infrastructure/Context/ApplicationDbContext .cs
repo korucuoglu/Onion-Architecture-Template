@@ -68,7 +68,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     }
 
     /// <summary>
-    /// CreatedDate ve UpdatedDate alanlarını boşsa doldurur.
+    /// CreatedDate ve UpdatedDate alanlarını doldurur. 
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
