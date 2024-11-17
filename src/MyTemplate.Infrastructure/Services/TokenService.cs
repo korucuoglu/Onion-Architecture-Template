@@ -22,13 +22,12 @@ public class TokenService: ITokenService
         _configuration = configuration;
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
     }
-
-
-    public string CreateToken(int userId, DateTime expiresIn)
+    public string CreateToken(int userId, DateTime expiresIn, TokenType tokenType)
     {
         var authClaims = new List<Claim>()
         {
             new(ClaimTypes.Id, _hashService.Encode(userId)),
+            new(ClaimTypes.TokenType, ((int)tokenType).ToString()),
         };
 
         var token = new JwtSecurityToken(
@@ -42,38 +41,56 @@ public class TokenService: ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public ClaimsPrincipal? ValidateToken(string token)
+    public ClaimsPrincipal ValidateToken(string token, TokenType tokenType)
     {
         try
         {
-            var principal = new JwtSecurityTokenHandler().ValidateToken(token, new()
+            var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = _key,
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.Zero // Token doğrulamasında tolerans süresi
-            }, out var validatedToken);
+            };
+
+            var principal = new JwtSecurityTokenHandler().ValidateToken(token, tokenValidationParameters, out var validatedToken);
+
+            if (!IsTokenTypeValid(principal, tokenType))
+            {
+                throw new CustomException(CustomResponseMessages.InvalidToken);
+            }
 
             return principal;
         }
-        catch
-        {
-            return null; // Token geçersizse null döndür
-        }
-    }
-
-    public int GetUserId(string token)
-    {
-        var princilal = ValidateToken(token);
-
-        if (princilal is null)
+        catch (SecurityTokenException)
         {
             throw new CustomException(CustomResponseMessages.InvalidToken);
         }
-        
-        var userId = princilal.Claims.First(c => c.Type == ClaimTypes.Id).Value;
+        catch (Exception)
+        {
+            throw new CustomException(CustomResponseMessages.InvalidToken);
+        }
+    }
+
+    public int GetUserId(string token, TokenType tokenType)
+    {
+        var principal = ValidateToken(token, tokenType);
+
+        var userId = principal.Claims.First(c => c.Type == ClaimTypes.Id).Value;
 
         return _hashService.Decode(userId);
+    }
+    
+    private bool IsTokenTypeValid(ClaimsPrincipal principal, TokenType tokenType)
+    {
+        var tokenTypeClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.TokenType);
+
+        if (tokenTypeClaim == null)
+        {
+            return false;
+        }
+
+        return tokenTypeClaim.Value == ((int)tokenType).ToString();
     }
 }

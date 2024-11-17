@@ -18,7 +18,7 @@ public class CommandHandler : CommandHandlerBase<Command>
 
     protected override async Task<Result> HandleAsync(Command request, CancellationToken cancellationToken)
     {
-        var userId = _tokenService.GetUserId(request.Token);
+        var userId = _tokenService.GetUserId(request.Token, TokenType.PasswordToken);
 
         var user = await _userManager.FindByIdAsync(userId.ToString());
 

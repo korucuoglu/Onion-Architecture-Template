@@ -15,4 +15,8 @@
     <ProjectReference Include="..\MyTemplate.Domain\MyTemplate.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AuthManagement\Password\" />
+  </ItemGroup>
+
 </Project>

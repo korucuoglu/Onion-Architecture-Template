@@ -1,6 +1,7 @@
 using Common.Builders;
 using Common.Events;
 using Microsoft.Extensions.Configuration;
+using MyTemplate.Application.ApplicationManagement.Common.Constants;
 using MyTemplate.Application.ApplicationManagement.Services;
 using MyTemplate.Domain.Entities.Identity;
 using Helper = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
@@ -45,7 +46,7 @@ internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordReset
     {
         var validateTokenUrl = Helper.GetValueFromConfiguration<string>(_configuration, "ClientApp:ValidateToken")!;
         
-        var token = _tokenService.CreateToken(user.Id, DateTime.Now.AddHours(2));
+        var token = _tokenService.CreateToken(user.Id, DateTime.Now.AddMinutes(15), TokenType.PasswordToken);
         
         var url = string.Format(validateTokenUrl, clientAppUrl, token);
 

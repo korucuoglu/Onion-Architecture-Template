@@ -40,7 +40,7 @@ public class CommandHandler : CommandHandlerBase<Command, Dto>
             return Result<Dto>.WithFailure(Error.WithMessage(CustomResponseMessages.EmailNotConfirmed));
         }
 
-        var accessToken = _tokenService.CreateToken(user.Id, DateTime.Now.AddDays(3));
+        var accessToken = _tokenService.CreateToken(user.Id, DateTime.Now.AddDays(3), TokenType.AccessToken);
 
         return Result<Dto>.WithSuccess(new()
         {

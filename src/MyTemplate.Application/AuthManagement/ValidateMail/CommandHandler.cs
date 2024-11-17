@@ -25,7 +25,7 @@ public class CommandHandler : CommandHandlerBase<Command>
             return Result.WithFailure(Error.WithMessage(CustomResponseMessages.InvalidUrl));
         }
 
-        var userId = _tokenService.GetUserId(request.Token);
+        var userId = _tokenService.GetUserId(request.Token, TokenType.MailToken);
 
         var user = await _userManager.FindByIdAsync(userId.ToString());
 

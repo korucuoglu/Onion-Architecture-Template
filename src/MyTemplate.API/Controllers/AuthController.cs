@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace MyTemplate.API.Controllers;
+﻿namespace MyTemplate.API.Controllers;
 
 [Route("api/[controller]")]
 public class AuthController : BaseApiController
@@ -10,8 +8,8 @@ public class AuthController : BaseApiController
     public async Task<IActionResult> ValidateMailAsync([FromRoute] Application.AuthManagement.ValidateMail.Command command)
      => Result(await Mediator.Send(command));
     
-    [HttpGet("validate/token/{Token}")]
-    public async Task<IActionResult> ValidateTokenAsync([FromRoute] Application.AuthManagement.ValidateToken.Command command)
+    [HttpGet("validate/reset-password-token/{Token}")]
+    public async Task<IActionResult> ValidateTokenAsync([FromRoute] Application.AuthManagement.ValidateResetPasswordToken.Command command)
         => Result(await Mediator.Send(command));
 
     [HttpPost("register")]
