@@ -63,10 +63,6 @@ public class TokenService: ITokenService
 
             return principal;
         }
-        catch (SecurityTokenException)
-        {
-            throw new CustomException(CustomResponseMessages.InvalidToken);
-        }
         catch (Exception)
         {
             throw new CustomException(CustomResponseMessages.InvalidToken);
@@ -78,7 +74,7 @@ public class TokenService: ITokenService
         var principal = ValidateToken(token, tokenType);
 
         var userId = principal.Claims.First(c => c.Type == ClaimTypes.Id).Value;
-
+        
         return _hashService.Decode(userId);
     }
     
