@@ -3,6 +3,7 @@ using System.Text;
 using Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -16,16 +17,24 @@ public static class ServiceRegistiration
         services.AddCommonServices(Assembly.GetExecutingAssembly(), configuration);
 
         services.AddControllers()
-       .AddNewtonsoftJson(opt =>
-       {
-           opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-       });
+            .AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            });
+
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter =
+                true; // ASP.NET Core'un model doğrulama hatalarını otomatik olarak kontrol edip işlemesini engeller
+        });
 
         services.AddCors(opt =>
         {
             opt.AddPolicy(name: "CorsPolicy", builder =>
             {
-                var clientAppUrl = ApplicationManagement.Helpers.Helper.GetValueFromConfiguration<string>(configuration, "ClientApp:Url");
+                var clientAppUrl =
+                    ApplicationManagement.Helpers.Helper.GetValueFromConfiguration<string>(configuration,
+                        "ClientApp:Url")!;
 
                 builder.WithOrigins(clientAppUrl)
                     .AllowAnyHeader()
@@ -33,6 +42,7 @@ public static class ServiceRegistiration
                     .AllowCredentials();
             });
         });
+
         #region JWT
 
         services.AddAuthentication(options =>
@@ -56,9 +66,12 @@ public static class ServiceRegistiration
 
         services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-            .RequireAuthenticatedUser()
-            .Build());
+                .RequireAuthenticatedUser()
+                .Build());
 
+        services.AddHealthChecks();
+        services.AddHttpClient();
+        services.AddHttpContextAccessor();
 
         #endregion JWT
     }

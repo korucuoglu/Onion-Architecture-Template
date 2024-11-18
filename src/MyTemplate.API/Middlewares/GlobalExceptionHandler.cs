@@ -34,12 +34,12 @@ public static class GlobalExceptionHandler
             return defaultMessage;
         }
         
-        if (exception is CustomException customEx)
+        if (exception.Error is CustomException customEx)
         {
             return customEx.Message;
         }
 
-        if (exception is UnauthorizedAccessException)
+        if (exception.Error is UnauthorizedAccessException)
         {
             return CustomResponseMessages.UnAuthorized;
         }
