@@ -1,4 +1,5 @@
-﻿namespace MyTemplate.API.Middlewares;
+﻿// ReSharper disable All
+namespace MyTemplate.API.Middlewares;
 
 public static class HealtCheck
 {
@@ -6,7 +7,7 @@ public static class HealtCheck
     {
         app.UseHealthChecks("/healt", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
         {
-            ResponseWriter = async (context, report) =>
+            ResponseWriter = async (context, _) =>
             {
                 await context.Response.WriteAsync("OK");
             }

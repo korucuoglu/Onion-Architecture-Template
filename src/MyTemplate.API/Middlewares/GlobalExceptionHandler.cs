@@ -27,23 +27,11 @@ public static class GlobalExceptionHandler
 
     private static string GetErrorMessage(IExceptionHandlerFeature? exception)
     {
-        var defaultMessage = "Bilinmeyen bir hata meydana geldi";
-
-        if (exception is null)
+        return exception?.Error switch
         {
-            return defaultMessage;
-        }
-        
-        if (exception.Error is CustomException customEx)
-        {
-            return customEx.Message;
-        }
-
-        if (exception.Error is UnauthorizedAccessException)
-        {
-            return CustomResponseMessages.UnAuthorized;
-        }
-        
-        return defaultMessage;
+            CustomException customEx => customEx.Message,
+            UnauthorizedAccessException => CustomResponseMessages.UnAuthorized,
+            _ => "Bilinmeyen bir hata meydana geldi"
+        };
     }
 }

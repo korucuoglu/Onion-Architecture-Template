@@ -1,7 +1,5 @@
-﻿using MyTemplate.Application.ApplicationManagement.Common.Constants;
-using MyTemplate.Application.ApplicationManagement.Services;
-
-namespace MyTemplate.Application.AuthManagement.ValidateResetPasswordToken;
+﻿
+namespace MyTemplate.Application.AuthManagement.Password.ValidateResetPasswordToken;
 
 public class CommandHandler : CommandHandlerBase<Command>
 {

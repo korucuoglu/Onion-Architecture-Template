@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.AuthManagement.ValidateResetPasswordToken;
+﻿namespace MyTemplate.Application.AuthManagement.Password.ValidateResetPasswordToken;
 
 public class Command : CommandBase
 {

@@ -1,4 +1,6 @@
-﻿namespace MyTemplate.API.Controllers;
+﻿using MyTemplate.Application.AuthManagement.Password.ValidateResetPasswordToken;
+
+namespace MyTemplate.API.Controllers;
 
 [Route("api/[controller]")]
 public class AuthController : BaseApiController
@@ -9,7 +11,7 @@ public class AuthController : BaseApiController
      => Result(await Mediator.Send(command));
     
     [HttpGet("validate/reset-password-token/{Token}")]
-    public async Task<IActionResult> ValidateTokenAsync([FromRoute] Application.AuthManagement.ValidateResetPasswordToken.Command command)
+    public async Task<IActionResult> ValidateTokenAsync([FromRoute] Command command)
         => Result(await Mediator.Send(command));
 
     [HttpPost("register")]
@@ -35,6 +37,4 @@ public class AuthController : BaseApiController
     [HttpPost("reset-password/confirm")]
     public async Task<IActionResult> ResetPasswordConfirmAsync([FromBody] Application.AuthManagement.ResetPasswordConfirm.Command command)
         => Result(await Mediator.Send(command));
-    
-  
 }
