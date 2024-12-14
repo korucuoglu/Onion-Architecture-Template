@@ -18,6 +18,7 @@
   <ItemGroup>
     <Folder Include="AuthManagement\Password\" />
     <Folder Include="RoleManagement\Queries\GetAllWithUser\" />
+    <Folder Include="UserRoleManagement\Queries\GetAllWithUser\" />
   </ItemGroup>
 
 </Project>
