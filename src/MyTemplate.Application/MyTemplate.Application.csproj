@@ -9,6 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Mjml.Net" Version="4.4.0" />
+    <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
+    <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.24.0" />
+
   </ItemGroup>
 
   <ItemGroup>
