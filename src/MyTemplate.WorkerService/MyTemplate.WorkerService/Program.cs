@@ -17,13 +17,20 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<EmailMessageConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq://localhost"); // RabbitMQ sunucusunun adresi
+        cfg.Host(builder.Configuration.GetValue<string>("RabbitMQ:Hostname"), h =>
+        {
+            h.Username(builder.Configuration.GetValue<string>("RabbitMQ:Username"));
+            h.Password(builder.Configuration.GetValue<string>("RabbitMQ:Password"));
+        });
+
         cfg.ReceiveEndpoint("email_queue", e =>
         {
             e.ConfigureConsumer<EmailMessageConsumer>(context);
         });
     });
 });
+
+
 
 var host = builder.Build();
 host.Run();

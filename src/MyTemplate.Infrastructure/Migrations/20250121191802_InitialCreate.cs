@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace MyTemplate.Infrastructure.Migrations
 {
@@ -13,6 +16,9 @@ namespace MyTemplate.Infrastructure.Migrations
         {
             migrationBuilder.EnsureSchema(
                 name: "AUTH");
+
+            migrationBuilder.EnsureSchema(
+                name: "APP");
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
@@ -67,6 +73,24 @@ namespace MyTemplate.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Setting",
+                schema: "APP",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Key = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    DataType = table.Column<string>(type: "text", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Setting", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,7 +167,8 @@ namespace MyTemplate.Infrastructure.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    RoleId = table.Column<int>(type: "integer", nullable: false)
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    Discriminator = table.Column<string>(type: "character varying(21)", maxLength: 21, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -184,6 +209,36 @@ namespace MyTemplate.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "AUTH",
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { 1, null, "Admin", "ADMIN" },
+                    { 2, null, "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "AUTH",
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { 1, 0, "5f4048e1-5f55-4e4b-90ab-5930b3bb31c0", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEOGKG/S9vWk6RzypdPdtyjBLXJbpB8aAYjGxXRAtw6g6/koY/bG/FIEhPcGyE+AylA==", null, false, "0198782d-204d-468d-8d0f-482ae029b452", false, "admin" },
+                    { 2, 0, "b0313f27-0e7f-4b92-9793-4bb089a1d1f0", "user@gmail.com", true, false, null, "USER@GMAIL.COM", "USER", "AQAAAAIAAYagAAAAEGdP5rezsj56ulNmLATcAOVA2WzXrTvkfwEiclzD7a5Y7Pj7HcA8pJrX3rPUMKRiOQ==", null, false, "c2bd484b-82a2-4c84-8eb2-c4897ce057dd", false, "user" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "AUTH",
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId", "Discriminator" },
+                values: new object[,]
+                {
+                    { 1, 1, "ApplicationUserRole" },
+                    { 2, 2, "ApplicationUserRole" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -256,6 +311,10 @@ namespace MyTemplate.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Setting",
+                schema: "APP");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles",

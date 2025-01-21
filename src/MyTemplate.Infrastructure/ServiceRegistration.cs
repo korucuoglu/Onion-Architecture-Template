@@ -51,10 +51,14 @@ public static class ServiceRegistration
         {
             x.UsingRabbitMq((context, cfg) =>
             {
-                cfg.Host(configuration.GetValue<string>("RabbitMQ:Hostname"));
+                cfg.Host(configuration.GetValue<string>("RabbitMQ:Hostname"), h =>
+                {
+                    h.Username(configuration.GetValue<string>("RabbitMQ:Username"));
+                    h.Password(configuration.GetValue<string>("RabbitMQ:Password"));
+                });
             });
         });
-        
+
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
         services.AddScoped<IUserContextAccessor, UserContextAccessor>();
