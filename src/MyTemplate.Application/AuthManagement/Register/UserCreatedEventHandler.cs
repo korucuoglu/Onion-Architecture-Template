@@ -4,7 +4,6 @@ using Common.Events;
 using Common.Extensions;
 using Common.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Helper = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
 
 namespace MyTemplate.Application.AuthManagement.Register;
 
@@ -26,8 +25,8 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
         var clientAppUrl = _configuration.GetConfigValue<string>("ClientApp:Url")!;
         
         var confirmUrl = GenerateConfirmUrl(notification.User, clientAppUrl);
-        
-        var templateContent = await Helper.GetHtmlTemplateAsync(cancellationToken, "Templates", "Email", "Register.mjml");
+
+        var templateContent = await GetTemplateContentAsync(cancellationToken);
 
         var replaceBuilder = new ReplaceBuilder(templateContent)
                                  .Replace("{{url}}", confirmUrl)
@@ -40,7 +39,17 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
             To = [notification.User.Email!]
         }, cancellationToken);
     }
+    
+    private async Task<string> GetTemplateContentAsync(CancellationToken cancellationToken)
+    {
+        var assembly = typeof(TemplateExtensions).Assembly;
+        
+        const string resourceName = "Common.Templates.Email.Register.mjml";
 
+        var htmlContent = await assembly.GetHtmlTemplateAsync(resourceName, cancellationToken);
+        
+        return htmlContent;
+    }
    
     private  string GenerateConfirmUrl(ApplicationUser user, string clientAppUrl)
     {
@@ -52,4 +61,5 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
 
         return url;
     }
+    
 }

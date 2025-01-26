@@ -20,6 +20,8 @@ public static class ServiceRegistration
                 configure.MigrationsAssembly("MyTemplate.Infrastructure"); // Migrationlar bu projede saklanacak
             });
         });
+        
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
         {

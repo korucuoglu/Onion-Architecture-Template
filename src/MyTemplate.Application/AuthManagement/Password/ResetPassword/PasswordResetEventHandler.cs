@@ -4,7 +4,6 @@ using Common.Events;
 using Common.Extensions;
 using Common.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Helper = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
 
 namespace MyTemplate.Application.AuthManagement.Password.ResetPassword;
 
@@ -24,8 +23,8 @@ internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordReset
     protected override async Task HandleAsync(PasswordResetEvent notification, CancellationToken cancellationToken)
     {
         var clientAppUrl = _configuration.GetConfigValue<string>("ClientApp:Url")!;
-        
-        var templateContent = await Helper.GetHtmlTemplateAsync(cancellationToken, "Templates", "Email", "ResetPassword.mjml");
+
+        var templateContent = await GetTemplateContentAsync(cancellationToken);
 
         var confirmUrl = GenerateConfirmUrl(notification.User, clientAppUrl);
 
@@ -39,6 +38,17 @@ internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordReset
             Body = replaceBuilder.Value,
             To = [notification.User.Email!]
         }, cancellationToken);
+    }
+    
+    private async Task<string> GetTemplateContentAsync(CancellationToken cancellationToken)
+    {
+        var assembly = typeof(TemplateExtensions).Assembly;
+        
+        const string resourceName = "Common.Templates.Email.ResetPassword.mjml";
+
+        var htmlContent = await assembly.GetHtmlTemplateAsync(resourceName, cancellationToken);
+        
+        return htmlContent;
     }
 
    
