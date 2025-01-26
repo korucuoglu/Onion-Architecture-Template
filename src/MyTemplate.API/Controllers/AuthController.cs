@@ -1,5 +1,5 @@
-﻿using MyTemplate.Application.AuthManagement.Password.ValidateResetPasswordToken;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using MyTemplate.Application.AuthManagement.Password.ChangePassword;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace MyTemplate.API.Controllers;
@@ -20,7 +20,7 @@ public class AuthController : BaseApiController
     [SwaggerOperation(Summary = "Şifre sıfırlama tokenı doğrulama", Description = "Şifre sıfırlama tokenının geçerliliğini kontrol eder")]
     [SwaggerResponse(200, "Token geçerli")]
     [SwaggerResponse(400, "Geçersiz token")]
-    public async Task<IActionResult> ValidateTokenAsync([FromRoute] Command command)
+    public async Task<IActionResult> ValidateTokenAsync([FromRoute] Application.AuthManagement.Password.ValidateResetPasswordToken.Command command)
         => Result(await Mediator.Send(command));
 
     [HttpPost("register")]
@@ -52,7 +52,7 @@ public class AuthController : BaseApiController
     [SwaggerOperation(Summary = "Şifre değiştirme", Description = "Kullanıcının şifresini değiştirir")]
     [SwaggerResponse(200, "Şifre başarıyla değiştirildi")]
     [SwaggerResponse(401, "Yetkisiz erişim")]
-    public async Task<IActionResult> ChangePasswordAsync([FromBody] Application.AuthManagement.ChangePassword.Command command)
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] Command command)
   => Result(await Mediator.Send(command));
     
     [HttpPost("reset-password")]
@@ -60,7 +60,7 @@ public class AuthController : BaseApiController
     [SwaggerOperation(Summary = "Şifre sıfırlama talebi", Description = "Kullanıcının şifre sıfırlama talebini başlatır")]
     [SwaggerResponse(200, "Şifre sıfırlama e-postası gönderildi")]
     [SwaggerResponse(400, "Geçersiz e-posta adresi")]
-    public async Task<IActionResult> ResetPasswordAsync([FromBody] Application.AuthManagement.ResetPassword.Command command)
+    public async Task<IActionResult> ResetPasswordAsync([FromBody] Application.AuthManagement.Password.ResetPassword.Command command)
         => Result(await Mediator.Send(command));
     
     [HttpPost("reset-password/confirm")]
@@ -68,6 +68,6 @@ public class AuthController : BaseApiController
     [SwaggerOperation(Summary = "Şifre sıfırlama onayı", Description = "Şifre sıfırlama işlemini tamamlar")]
     [SwaggerResponse(200, "Şifre başarıyla sıfırlandı")]
     [SwaggerResponse(400, "Geçersiz token veya şifre")]
-    public async Task<IActionResult> ResetPasswordConfirmAsync([FromBody] Application.AuthManagement.ResetPasswordConfirm.Command command)
+    public async Task<IActionResult> ResetPasswordConfirmAsync([FromBody] Application.AuthManagement.Password.ResetPasswordConfirm.Command command)
         => Result(await Mediator.Send(command));
 }

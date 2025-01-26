@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Application.UserRoleManagement.Queries.GetAll;
 

@@ -1,4 +1,4 @@
-﻿namespace MyTemplate.Application.AuthManagement.ResetPasswordConfirm;
+﻿namespace MyTemplate.Application.AuthManagement.Password.ResetPasswordConfirm;
 
 public class Command : CommandBase
 {

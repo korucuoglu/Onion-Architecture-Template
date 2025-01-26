@@ -1,6 +1,4 @@
-using MyTemplate.Domain.Entities.Identity;
-
-namespace MyTemplate.Application.AuthManagement.ResetPassword;
+namespace MyTemplate.Application.AuthManagement.Password.ResetPassword;
 
 public class PasswordResetEvent: NotificationBase
 {

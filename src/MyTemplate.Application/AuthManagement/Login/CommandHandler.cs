@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyTemplate.Application.ApplicationManagement.Common.Constants;
-using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Domain.Entities.Identity;
+﻿using Common.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace MyTemplate.Application.AuthManagement.Login;
 

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
+using Common.Entities;
+using Common.Repositories.EF;
 using Microsoft.EntityFrameworkCore.Query;
-using MyTemplate.Application.ApplicationManagement.Repositories.EF;
-using MyTemplate.Domain.Entities;
 
 namespace MyTemplate.Infrastructure.Repositories.EF;
 

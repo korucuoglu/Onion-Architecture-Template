@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MyTemplate.Application.ApplicationManagement.Common.Constants;
-using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Domain.Entities.Identity;
 
-namespace MyTemplate.Application.AuthManagement.ResetPasswordConfirm;
+namespace MyTemplate.Application.AuthManagement.Password.ResetPasswordConfirm;
 
 public class CommandHandler : CommandHandlerBase<Command>
 {

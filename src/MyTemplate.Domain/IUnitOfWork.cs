@@ -1,5 +1,4 @@
-﻿using MyTemplate.Application.ApplicationManagement.Repositories.Dapper;
-using MyTemplate.Application.ApplicationManagement.Repositories.EF;
+﻿using Common.Repositories.EF;
 
 namespace MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
 

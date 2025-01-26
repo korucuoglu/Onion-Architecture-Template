@@ -1,6 +1,4 @@
-﻿using MyTemplate.Domain.Entities.Identity;
-
-namespace MyTemplate.Application.AuthManagement.Register;
+﻿namespace MyTemplate.Application.AuthManagement.Register;
 
 public class UserCreatedEvent : NotificationBase
 {

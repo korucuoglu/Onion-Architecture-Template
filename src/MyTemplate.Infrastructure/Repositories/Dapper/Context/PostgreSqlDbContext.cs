@@ -1,4 +1,4 @@
-﻿using MyTemplate.Application.ApplicationManagement.Repositories.Dapper;
+﻿using Common.Repositories.Dapper;
 using Npgsql;
 
 namespace MyTemplate.Infrastructure.Repositories.Dapper.Context;

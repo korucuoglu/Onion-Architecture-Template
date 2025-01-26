@@ -1,11 +1,10 @@
-﻿using MassTransit;
+﻿using Common.Entities.Setting;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
 using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Domain.Entities.Identity;
-using MyTemplate.Domain.Entities.Setting;
 using MyTemplate.Infrastructure.Services;
 
 namespace MyTemplate.Infrastructure;

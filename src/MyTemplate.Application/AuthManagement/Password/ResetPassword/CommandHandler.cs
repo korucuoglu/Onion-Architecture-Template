@@ -1,8 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using MyTemplate.Domain.Entities.Identity;
 
-namespace MyTemplate.Application.AuthManagement.ResetPassword;
+namespace MyTemplate.Application.AuthManagement.Password.ResetPassword;
 
 public class CommandHandler: CommandHandlerBase<Command>
 {

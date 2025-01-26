@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Identity;
-using MyTemplate.Domain.Entities.Identity;
-using MyTemplate.Domain.Entities.Setting;
+using Common.Entities.Setting;
 
 namespace MyTemplate.Infrastructure.EntityConfiguration;
 

@@ -1,12 +1,9 @@
 using Common.Builders;
 using Common.Events;
 using Microsoft.Extensions.Configuration;
-using MyTemplate.Application.ApplicationManagement.Common.Constants;
-using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Domain.Entities.Identity;
 using Helper = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
 
-namespace MyTemplate.Application.AuthManagement.ResetPassword;
+namespace MyTemplate.Application.AuthManagement.Password.ResetPassword;
 
 internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordResetEvent>
 {

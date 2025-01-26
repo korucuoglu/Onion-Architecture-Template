@@ -1,7 +1,6 @@
-﻿using Common.Exceptions;
+﻿using Common.Entities.Setting;
+using Common.Exceptions;
 using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Domain.Entities;
-using MyTemplate.Domain.Entities.Setting;
 using Newtonsoft.Json;
 
 namespace MyTemplate.Infrastructure.Services;

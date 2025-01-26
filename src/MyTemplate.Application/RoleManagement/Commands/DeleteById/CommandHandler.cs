@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using MyTemplate.Application.ApplicationManagement.Extensions;
-using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Application.RoleManagement.Commands.DeleteById;
 

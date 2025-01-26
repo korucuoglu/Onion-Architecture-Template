@@ -1,4 +1,4 @@
-﻿using MyTemplate.Application.ApplicationManagement.Repositories.EF;
+﻿using Common.Repositories.EF;
 using MyTemplate.Infrastructure.Repositories.EF;
 
 namespace MyTemplate.Infrastructure.UnitOfWork;

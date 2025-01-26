@@ -1,4 +1,4 @@
-namespace MyTemplate.Application.AuthManagement.ResetPassword;
+namespace MyTemplate.Application.AuthManagement.Password.ResetPassword;
 
 public class Command: CommandBase
 {

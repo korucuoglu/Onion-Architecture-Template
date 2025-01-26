@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using MyTemplate.Domain.Entities.Identity;
 
 namespace MyTemplate.Infrastructure.EntityConfiguration;
 

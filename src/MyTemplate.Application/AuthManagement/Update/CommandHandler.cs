@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MyTemplate.Application.ApplicationManagement.Common.Constants;
-using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Domain.Entities.Identity;
-
 namespace MyTemplate.Application.AuthManagement.Update;
 
 public class CommandHandler : CommandHandlerBase<Command>

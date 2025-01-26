@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using MyTemplate.Application.ApplicationManagement.Repositories.Dapper;
+using Common.Repositories.Dapper;
 
 namespace MyTemplate.Infrastructure.Repositories.Dapper.Context;
 
