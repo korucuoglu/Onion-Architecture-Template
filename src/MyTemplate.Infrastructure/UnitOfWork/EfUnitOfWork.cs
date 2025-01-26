@@ -1,4 +1,4 @@
-﻿using Common.Repositories.Ef;
+﻿using Common.Interfaces.Repositories.Ef;
 using Common.Services.Repositories.Ef;
 
 namespace MyTemplate.Infrastructure.UnitOfWork;

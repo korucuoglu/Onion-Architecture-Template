@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Common.Constants;
+using Common.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace MyTemplate.Application.AuthManagement.Password.ResetPasswordConfirm;
 

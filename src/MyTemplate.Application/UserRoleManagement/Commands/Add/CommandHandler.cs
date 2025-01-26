@@ -1,5 +1,6 @@
+using Common.Extensions;
+using Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using MyTemplate.Application.ApplicationManagement.Extensions;
 
 namespace MyTemplate.Application.UserRoleManagement.Commands.Add;
 

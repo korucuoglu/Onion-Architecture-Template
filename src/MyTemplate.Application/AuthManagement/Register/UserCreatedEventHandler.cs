@@ -1,5 +1,8 @@
 ﻿using Common.Builders;
+using Common.Constants;
 using Common.Events;
+using Common.Extensions;
+using Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Helper = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
 
@@ -20,7 +23,7 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
     
     protected override async Task HandleAsync(UserCreatedEvent notification, CancellationToken cancellationToken)
     {
-        var clientAppUrl = Helper.GetValueFromConfiguration<string>(_configuration, "ClientApp:Url")!;
+        var clientAppUrl = _configuration.GetConfigValue<string>("ClientApp:Url")!;
         
         var confirmUrl = GenerateConfirmUrl(notification.User, clientAppUrl);
         
@@ -41,7 +44,7 @@ internal class UserCreatedEventHandler : NotificationHandlerBase<UserCreatedEven
    
     private  string GenerateConfirmUrl(ApplicationUser user, string clientAppUrl)
     {
-        var validateMailUrl = Helper.GetValueFromConfiguration<string>(_configuration, "ClientApp:ValidateMail")!;
+        var validateMailUrl = _configuration.GetConfigValue<string>("ClientApp:ValidateMail")!;
         
         var token = _tokenService.CreateToken(user.Id, DateTime.Now.AddMinutes(15), TokenType.MailToken);
         

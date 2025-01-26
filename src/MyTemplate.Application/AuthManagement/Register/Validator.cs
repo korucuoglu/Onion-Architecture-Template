@@ -1,4 +1,4 @@
-﻿using MyTemplate.Application.ApplicationManagement.Common.Constants;
+﻿using Common.Constants;
 
 namespace MyTemplate.Application.AuthManagement.Register;
 

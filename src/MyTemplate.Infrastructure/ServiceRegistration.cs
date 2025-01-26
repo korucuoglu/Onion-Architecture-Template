@@ -1,11 +1,11 @@
 ﻿using Common.Entities.Setting;
+using Common.Interfaces;
+using Common.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
-using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Infrastructure.Services;
 
 namespace MyTemplate.Infrastructure;
 

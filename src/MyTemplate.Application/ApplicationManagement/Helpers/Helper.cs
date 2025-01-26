@@ -37,16 +37,4 @@ public static class Helper
 
         throw new FileNotFoundException("İlgili dosyanın html veya mjml formatında olması gerekmektedir.");
     }
-
-    public static T? GetValueFromConfiguration<T>(IConfiguration configuration, string key, bool isRequired = true)
-    {
-        var value = configuration.GetValue<T>(key);
-
-        if (value is null && isRequired)
-        {
-            throw new InvalidOperationException($"{key} ayarı yapılandırılmamış.");
-        }
-
-        return value;
-    }
 }

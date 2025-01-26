@@ -1,5 +1,8 @@
 using Common.Builders;
+using Common.Constants;
 using Common.Events;
+using Common.Extensions;
+using Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Helper = MyTemplate.Application.ApplicationManagement.Helpers.Helper;
 
@@ -20,8 +23,8 @@ internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordReset
     
     protected override async Task HandleAsync(PasswordResetEvent notification, CancellationToken cancellationToken)
     {
-        var clientAppUrl = Helper.GetValueFromConfiguration<string>(_configuration, "ClientApp:Url")!;
-
+        var clientAppUrl = _configuration.GetConfigValue<string>("ClientApp:Url")!;
+        
         var templateContent = await Helper.GetHtmlTemplateAsync(cancellationToken, "Templates", "Email", "ResetPassword.mjml");
 
         var confirmUrl = GenerateConfirmUrl(notification.User, clientAppUrl);
@@ -41,7 +44,7 @@ internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordReset
    
     private  string GenerateConfirmUrl(ApplicationUser user, string clientAppUrl)
     {
-        var validateTokenUrl = Helper.GetValueFromConfiguration<string>(_configuration, "ClientApp:ValidateToken")!;
+        var validateTokenUrl = _configuration.GetConfigValue<string>("ClientApp:ValidateToken")!;
         
         var token = _tokenService.CreateToken(user.Id, DateTime.Now.AddMinutes(15), TokenType.PasswordToken);
         

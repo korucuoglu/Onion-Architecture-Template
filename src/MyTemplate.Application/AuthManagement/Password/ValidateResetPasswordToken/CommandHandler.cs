@@ -1,4 +1,7 @@
 ﻿
+using Common.Constants;
+using Common.Interfaces;
+
 namespace MyTemplate.Application.AuthManagement.Password.ValidateResetPasswordToken;
 
 public class CommandHandler : CommandHandlerBase<Command>

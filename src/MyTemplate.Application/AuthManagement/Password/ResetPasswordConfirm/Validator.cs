@@ -1,4 +1,6 @@
-﻿namespace MyTemplate.Application.AuthManagement.Password.ResetPasswordConfirm;
+﻿using Common.Constants;
+
+namespace MyTemplate.Application.AuthManagement.Password.ResetPasswordConfirm;
 
 public class Validator : ValidatorBase<Command>
 {

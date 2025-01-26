@@ -2,14 +2,14 @@
 using System.Text;
 using AspNetCoreRateLimit;
 using Common;
+using Common.Extensions;
+using Common.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using MyTemplate.Application.ApplicationManagement.Extensions;
 
 namespace MyTemplate.Application;
 
@@ -42,14 +42,17 @@ public static class ServiceRegistiration
 
     private static void ConfigureCors(IServiceCollection services, IConfiguration configuration)
     {
+        var clientAppUrl = configuration.GetConfigValue<string?>("ClientApp:Url", false);
+        
+        if (string.IsNullOrWhiteSpace(clientAppUrl))
+        {
+            return;
+        }
+        
         services.AddCors(opt =>
         {
             opt.AddPolicy(name: "CorsPolicy", builder =>
             {
-                var clientAppUrl =
-                    ApplicationManagement.Helpers.Helper.GetValueFromConfiguration<string>(configuration,
-                        "ClientApp:Url")!;
-
                 builder.WithOrigins(clientAppUrl)
                     .AllowAnyHeader()
                     .AllowAnyMethod()
@@ -79,7 +82,7 @@ public static class ServiceRegistiration
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
             };
         })
-        .AddApiKeyInHeader(configuration);
+        .AddApiKeyInHeader(configuration); // Header'a Api Key'in geçilmesini zorunlu hale getirir. 
 
         services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)

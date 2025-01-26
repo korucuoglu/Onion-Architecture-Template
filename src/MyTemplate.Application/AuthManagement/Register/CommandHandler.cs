@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Common.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 namespace MyTemplate.Application.AuthManagement.Register;
 
