@@ -1,4 +1,4 @@
-﻿using Common.Repositories.EF;
+﻿using Common.Repositories.Ef;
 using MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
 
 namespace MyTemplate.Infrastructure.UnitOfWork;
@@ -12,5 +12,5 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
     }
 
-    public IEFUnitOfWork EF => new EFUnitOfWork(_context);
+    public IEfUnitOfWork EF => new EfUnitOfWork(_context);
 }

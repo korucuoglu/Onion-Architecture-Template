@@ -1,3 +1,4 @@
+using Common.Controllers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MyTemplate.API.Controllers;

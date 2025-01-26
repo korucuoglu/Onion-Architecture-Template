@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Common.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using MyTemplate.Application.AuthManagement.Password.ChangePassword;
 using Swashbuckle.AspNetCore.Annotations;
 

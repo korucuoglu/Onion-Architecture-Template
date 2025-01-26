@@ -1,10 +1,10 @@
-﻿using Common.Repositories.EF;
+﻿using Common.Repositories.Ef;
 
 namespace MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
 
 public interface IUnitOfWork
 {
-    public IEFUnitOfWork EF { get; }
+    public IEfUnitOfWork EF { get; }
     
     // public IDapperUnitOfWork<IDapperDbContext> Dapper { get; }
 }
