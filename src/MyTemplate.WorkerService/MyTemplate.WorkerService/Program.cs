@@ -9,7 +9,7 @@ var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSetting"));
 
-builder.Services.AddTransient<MailService>();
+builder.Services.AddTransient<IMailService, MailService>();
 
 builder.Services.AddHostedService<Worker>();
 
