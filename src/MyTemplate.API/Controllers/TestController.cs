@@ -1,11 +1,9 @@
 ﻿using Common.Controllers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace MyTemplate.API.Controllers;
 
 [Authorize]
-[Route("api/test")]
 public class TestController : BaseApiController
 {
     [HttpGet]
