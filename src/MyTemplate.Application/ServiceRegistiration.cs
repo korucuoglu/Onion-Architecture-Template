@@ -3,7 +3,6 @@ using System.Text;
 using AspNetCoreRateLimit;
 using Common;
 using Common.Extensions;
-using Common.Middlewares;
 using Common.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
