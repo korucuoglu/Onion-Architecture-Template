@@ -1,10 +1,10 @@
-﻿using Common.Events;
+﻿using Common.Models;
+using Common.Services;
 using MassTransit;
-using MyTemplate.WorkerService.Services;
 
 namespace MyTemplate.WorkerService.Consumers;
 
-public class EmailMessageConsumer : IConsumer<MailSendEvent>
+public class EmailMessageConsumer : IConsumer<MailSendInput>
 {
     private readonly MailService _mailService;
     private readonly ILogger<EmailMessageConsumer> _logger;
@@ -15,7 +15,7 @@ public class EmailMessageConsumer : IConsumer<MailSendEvent>
         _logger = logger;
     }
 
-    public async Task Consume(ConsumeContext<MailSendEvent> context)
+    public async Task Consume(ConsumeContext<MailSendInput> context)
     {
         var emailMessage = context.Message;
 

@@ -1,8 +1,9 @@
+using Common.Interfaces;
+using Common.Models;
+using Common.Services;
 using MassTransit;
 using MyTemplate.WorkerService;
 using MyTemplate.WorkerService.Consumers;
-using MyTemplate.WorkerService.Models;
-using MyTemplate.WorkerService.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 

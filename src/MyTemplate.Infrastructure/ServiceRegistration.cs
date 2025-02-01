@@ -61,6 +61,7 @@ public static class ServiceRegistration
         });
 
         services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IMailService, MailService>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
         services.AddScoped<IUserContextAccessor, UserContextAccessor>();
         services.AddSingleton<ITokenService, TokenService>();

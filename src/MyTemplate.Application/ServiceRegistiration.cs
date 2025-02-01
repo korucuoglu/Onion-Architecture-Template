@@ -4,6 +4,7 @@ using AspNetCoreRateLimit;
 using Common;
 using Common.Extensions;
 using Common.Middlewares;
+using Common.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,8 @@ public static class ServiceRegistiration
         ConfigureAuthentication(services, configuration);
         ConfigureRateLimiting(services, configuration);
 
+        
+        services.Configure<MailSetting>(configuration.GetSection("MailSetting"));
         services.AddHealthChecks();
         services.AddHttpClient();
         services.AddHttpContextAccessor();

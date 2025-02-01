@@ -1,23 +1,23 @@
 using Common.Builders;
 using Common.Constants;
-using Common.Events;
 using Common.Extensions;
 using Common.Interfaces;
+using Common.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace MyTemplate.Application.AuthManagement.Password.ResetPassword;
 
 internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordResetEvent>
 {
-    private readonly IMessageService _messageService;
     private readonly IConfiguration _configuration;
     private readonly ITokenService _tokenService;
+    private readonly IMailService _mailService;
 
-    public PasswordResetEventHandler(IMessageService messageService,IConfiguration configuration, ITokenService tokenService)
+    public PasswordResetEventHandler(IConfiguration configuration, ITokenService tokenService, IMailService mailService)
     {
-        _messageService = messageService;
         _configuration = configuration;
         _tokenService = tokenService;
+        _mailService = mailService;
     }
     
     protected override async Task HandleAsync(PasswordResetEvent notification, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ internal class PasswordResetEventHandler : NotificationHandlerBase<PasswordReset
                                  .Replace("{{url}}", confirmUrl)
                                  .Replace("{{companyName}}", clientAppUrl)
                                  ;
-        await _messageService.PublisAsync<MailSendEvent>(new()
+        await _mailService.SendAsync(new()
         {
             Subject = "Parola Sıfırlama Talebi",
             Body = replaceBuilder.Value,
