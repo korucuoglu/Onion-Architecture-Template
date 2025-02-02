@@ -1,12 +1,11 @@
-﻿using MassTransit;
+﻿using Common.Entities.Setting;
+using Common.Interfaces;
+using Common.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyTemplate.Application.ApplicationManagement.Repositories.UnitOfWork;
-using MyTemplate.Application.ApplicationManagement.Services;
-using MyTemplate.Domain.Entities.Identity;
-using MyTemplate.Domain.Entities.Setting;
-using MyTemplate.Infrastructure.Services;
 
 namespace MyTemplate.Infrastructure;
 
@@ -21,6 +20,8 @@ public static class ServiceRegistration
                 configure.MigrationsAssembly("MyTemplate.Infrastructure"); // Migrationlar bu projede saklanacak
             });
         });
+        
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
         {
@@ -60,6 +61,7 @@ public static class ServiceRegistration
         });
 
         services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IMailService, MailService>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
         services.AddScoped<IUserContextAccessor, UserContextAccessor>();
         services.AddSingleton<ITokenService, TokenService>();

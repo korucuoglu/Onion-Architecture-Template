@@ -1,6 +1,9 @@
 ﻿using System.Reflection;
 using System.Text;
+using AspNetCoreRateLimit;
 using Common;
+using Common.Extensions;
+using Common.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,51 +31,75 @@ public static class ServiceRegistiration
                 true; // ASP.NET Core'un model doğrulama hatalarını otomatik olarak kontrol edip işlemesini engeller
         });
 
+        ConfigureCors(services, configuration);
+        ConfigureAuthentication(services, configuration);
+        ConfigureRateLimiting(services, configuration);
+
+        
+        services.Configure<MailSetting>(configuration.GetSection("MailSetting"));
+        services.AddHealthChecks();
+        services.AddHttpClient();
+        services.AddHttpContextAccessor();
+    }
+
+    private static void ConfigureCors(IServiceCollection services, IConfiguration configuration)
+    {
+        var clientAppUrl = configuration.GetConfigValue<string?>("ClientApp:Url", false);
+        
+        if (string.IsNullOrWhiteSpace(clientAppUrl))
+        {
+            return;
+        }
+        
         services.AddCors(opt =>
         {
             opt.AddPolicy(name: "CorsPolicy", builder =>
             {
-                var clientAppUrl =
-                    ApplicationManagement.Helpers.Helper.GetValueFromConfiguration<string>(configuration,
-                        "ClientApp:Url")!;
-
                 builder.WithOrigins(clientAppUrl)
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
             });
         });
+    }
 
-        #region JWT
-
+    private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+    {
         services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-        {
-            options.SaveToken = true;
-            options.RequireHttpsMetadata = false;
-            options.TokenValidationParameters = new TokenValidationParameters()
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidAudience = configuration["JWT:ValidAudience"],
-                ValidIssuer = configuration["JWT:ValidIssuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-            };
-        });
-
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = configuration["JWT:ValidAudience"],
+                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                };
+            });
         services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                 .RequireAuthenticatedUser()
                 .Build());
-
-        services.AddHealthChecks();
-        services.AddHttpClient();
-        services.AddHttpContextAccessor();
-
-        #endregion JWT
     }
+
+    private static void ConfigureRateLimiting(IServiceCollection services, IConfiguration configuration)
+    {
+        // Rate Limiting için Memory Cache ekleme
+        services.AddMemoryCache();
+
+        // Rate Limiting konfigürasyonu
+        services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
+        services.Configure<IpRateLimitPolicies>(configuration.GetSection("IpRateLimitPolicies"));
+        services.AddInMemoryRateLimiting();
+        services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+    }
+   
 }

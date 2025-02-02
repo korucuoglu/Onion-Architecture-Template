@@ -1,7 +1,7 @@
+using Common.Controllers;
 namespace MyTemplate.API.Controllers;
 
-[Route("api/[controller]")]
-public class UserRoleController : BaseApiController
+public class UserRoleController: BaseUserRoleController
 {
     
 }

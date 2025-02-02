@@ -1,22 +1,26 @@
-using MyTemplate.API.Middlewares;
+using AspNetCoreRateLimit;
+using Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddSwaggerServices();
 
 var app = builder.Build();
 
-app.UseRouting();
+// IP Rate Limiting middleware
+app.UseIpRateLimiting();
 
+// Configure Swagger middleware
+app.UseSwaggerServices(app.Environment);
+
+// app.UseSecurityHeaders();
+app.UseRouting();
 app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseHealtCheck();
 app.UseGlobalExceptionHandler();
-
 app.MapControllers();
 app.Run();

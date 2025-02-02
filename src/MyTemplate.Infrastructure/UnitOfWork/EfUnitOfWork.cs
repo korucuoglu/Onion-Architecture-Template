@@ -1,13 +1,13 @@
-﻿using MyTemplate.Application.ApplicationManagement.Repositories.EF;
-using MyTemplate.Infrastructure.Repositories.EF;
+﻿using Common.Interfaces.Repositories.Ef;
+using Common.Services.Repositories.Ef;
 
 namespace MyTemplate.Infrastructure.UnitOfWork;
 
-public class EFUnitOfWork : IEFUnitOfWork
+public class EfUnitOfWork : IEfUnitOfWork
 {
     private readonly ApplicationDbContext _context;
 
-    public EFUnitOfWork(ApplicationDbContext context)
+    public EfUnitOfWork(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -22,8 +22,8 @@ public class EFUnitOfWork : IEFUnitOfWork
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => await _context.SaveChangesAsync(cancellationToken);
 
-    IEFGenericRepository<TModel, TId> IEFUnitOfWork.GetRepository<TModel, TId>()
+    IEfGenericRepository<TModel, TId> IEfUnitOfWork.GetRepository<TModel, TId>()
     {
-        return new EFGenericRepository<TModel, TId, ApplicationDbContext>(_context);
+        return new EfGenericRepository<TModel, TId, ApplicationDbContext>(_context);
     }
 }
