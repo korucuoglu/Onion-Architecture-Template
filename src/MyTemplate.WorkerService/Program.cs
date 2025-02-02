@@ -2,6 +2,9 @@ using Common.Interfaces;
 using Common.Models;
 using Common.Services;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MyTemplate.WorkerService;
 using MyTemplate.WorkerService.Consumers;
 

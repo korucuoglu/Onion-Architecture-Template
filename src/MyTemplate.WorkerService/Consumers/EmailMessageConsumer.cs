@@ -1,7 +1,9 @@
-﻿using Common.Interfaces;
+﻿using System;
+using System.Threading.Tasks;
+using Common.Interfaces;
 using Common.Models;
-using Common.Services;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace MyTemplate.WorkerService.Consumers;
 
