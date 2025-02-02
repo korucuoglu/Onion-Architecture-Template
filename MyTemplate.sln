@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyTemplate.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyTemplate.API", "src\MyTemplate.API\MyTemplate.API.csproj", "{B933586C-885B-4DA5-A71C-B2E03902324D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\Common\Common\Common.csproj", "{91DBCC1A-3F6B-4039-BAC2-C5ECABDC2B2A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTemplate.WorkerService", "src\MyTemplate.WorkerService\MyTemplate.WorkerService.csproj", "{A949F8E2-FB3F-4E9A-AAB2-47CA68329D2C}"
 EndProject
 Global
@@ -37,10 +35,6 @@ Global
 		{B933586C-885B-4DA5-A71C-B2E03902324D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B933586C-885B-4DA5-A71C-B2E03902324D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B933586C-885B-4DA5-A71C-B2E03902324D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91DBCC1A-3F6B-4039-BAC2-C5ECABDC2B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91DBCC1A-3F6B-4039-BAC2-C5ECABDC2B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91DBCC1A-3F6B-4039-BAC2-C5ECABDC2B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91DBCC1A-3F6B-4039-BAC2-C5ECABDC2B2A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A949F8E2-FB3F-4E9A-AAB2-47CA68329D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A949F8E2-FB3F-4E9A-AAB2-47CA68329D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A949F8E2-FB3F-4E9A-AAB2-47CA68329D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
