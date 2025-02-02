@@ -1,7 +1,11 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Abdullah Halit Korucuoğlu",
-  "classifications": ["Web", "API", "Onion Architecture"],
+  "classifications": [
+    "Web",
+    "API",
+    "Onion Architecture"
+  ],
   "name": "Korucuoglu Template",
   "identity": "Korucuoglu.Template",
   "shortName": "korucuoglu-template",
@@ -13,7 +17,9 @@
   },
   "sources": [
     {
-      "exclude": ["**/.git/**"],
+      "exclude": [
+        "**/.git/**"
+      ],
       "modifiers": [
         {
           "condition": "(!ExcludeApplication)",
@@ -39,13 +45,12 @@
             "src/MyTemplate.API/**": "src/{{ProjectName}}.API/**"
           }
         },
-		{
+        {
           "condition": "(!ExcludeWorkerService)",
           "rename": {
             "src/MyTemplate.API/**": "src/{{ProjectName}}.WorkerService/**"
           }
-        },
-		
+        }
       ]
     }
   ],
@@ -53,7 +58,11 @@
     {
       "actionId": "4EBD6475-2A97-4514-A125-3A07F8E57B54",
       "description": "Restore NuGet packages required by this project.",
-      "manualInstructions": [{ "text": "Run 'dotnet restore'" }],
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet restore'"
+        }
+      ],
       "continueOnError": true
     }
   ]
