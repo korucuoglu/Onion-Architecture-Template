@@ -18,7 +18,17 @@
   "sources": [
     {
       "exclude": [
-        "**/.git/**"
+        "**/.git/**",
+        "**/.idea/**",
+        "**/.vs/**",
+        "**/.template.config/**",
+        "**/bin/**",
+        "**/obj/**",
+        "**/*.user",
+        "**/*.DotSettings.user",
+        ".gitignore",
+        "README.md",
+        "LICENSE"
       ],
       "modifiers": [
         {
