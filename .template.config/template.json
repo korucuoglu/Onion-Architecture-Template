@@ -2,9 +2,9 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Abdullah Halit Korucuoğlu",
   "classifications": ["Web", "API", "Onion Architecture"],
-  "identity": "MyCompany.MyTemplate",
-  "name": "My Company Onion Template",
-  "shortName": "oniontemplate1",
+  "name": "Korucuoglu Template",
+  "identity": "Korucuoglu.Template",
+  "shortName": "korucuoglu-template",
   "sourceName": "MyTemplate",
   "preferNameDirectory": true,
   "tags": {
@@ -16,35 +16,36 @@
       "exclude": ["**/.git/**"],
       "modifiers": [
         {
-          "condition": "(!ExcludeAuthApplication)",
+          "condition": "(!ExcludeApplication)",
           "rename": {
             "src/MyTemplate.Application/**": "src/{{ProjectName}}.Application/**"
           }
         },
         {
-          "condition": "(!ExcludeAuthDomain)",
+          "condition": "(!ExcludeDomain)",
           "rename": {
             "src/MyTemplate.Domain/**": "src/{{ProjectName}}.Domain/**"
           }
         },
         {
-          "condition": "(!ExcludeAuthInfrastructure)",
+          "condition": "(!ExcludeInfrastructure)",
           "rename": {
             "src/MyTemplate.Infrastructure/**": "src/{{ProjectName}}.Infrastructure/**"
           }
         },
         {
-          "condition": "(!ExcludeAuthPersistence)",
-          "rename": {
-            "src/MyTemplate.Persistence/**": "src/{{ProjectName}}.Persistence/**"
-          }
-        },
-        {
-          "condition": "(!ExcludeAuthPresentation)",
+          "condition": "(!ExcludeAPI)",
           "rename": {
             "src/MyTemplate.API/**": "src/{{ProjectName}}.API/**"
           }
-        }
+        },
+		{
+          "condition": "(!ExcludeWorkerService)",
+          "rename": {
+            "src/MyTemplate.API/**": "src/{{ProjectName}}.WorkerService/**"
+          }
+        },
+		
       ]
     }
   ],
